@@ -67,8 +67,9 @@ public class UsersController {
             return "user/register";
         }
         user.setRole(rolesService.getRoles()[0]);
+        user.setPassword(usersService.generateUserPassword());
         usersService.addUser(user);
-        securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
+        System.out.println(user.getPassword());
         return "redirect:home";
     }
 

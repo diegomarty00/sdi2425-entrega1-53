@@ -28,22 +28,35 @@ public class RegisterFormValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Error.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "Error.empty");
 
-        if (user.getDni().length() != 9) {
-            errors.rejectValue("dni", "Error.signup.dni.length");}
+        String trimmed = user.getDni().trim();
+        boolean valid = true;
+        if(user.getDni().length() > trimmed.length()) {
+            errors.rejectValue("dni", "Error.register.dni.spaces");
+            valid = false;
+        } else if (user.getDni().length() != 9) {
+            errors.rejectValue("dni", "Error.register.dni.format");
+            valid = false;
+        } else {
+            for (int i = 0; i < 8; i++) {
+                if (!Character.isDigit(user.getDni().charAt(i))) {
+                    errors.rejectValue("dni", "Error.register.dni.format");
+                    valid = false;
+                }
+            }
+        }
 
-        if (usersService.getUserByDni(user.getDni()) != null) {
-            errors.rejectValue("dni", "Error.signup.dni.duplicate");}
+        if (valid && usersService.getUserByDni(user.getDni()) != null) {
+            errors.rejectValue("dni", "Error.register.dni.duplicate");
+        }
 
-        if (user.getName().length() < 5 || user.getName().length() > 24) {
-            errors.rejectValue("name", "Error.signup.name.length");}
+        trimmed = user.getName().trim();
+        if (user.getName().length() > trimmed.length()) {
+            errors.rejectValue("name", "Error.register.name.spaces");
+        }
 
-        if (user.getLastName().length() < 5 || user.getLastName().length() > 24) {
-            errors.rejectValue("lastName", "Error.signup.lastName.length");}
-
-        if (user.getPassword().length() < 5 || user.getPassword().length() > 24) {
-            errors.rejectValue("password", "Error.signup.password.length");}
-        if (!user.getPasswordConfirm().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm",
-                    "Error.signup.passwordConfirm.coincidence");}
+        trimmed = user.getLastName().trim();
+        if (user.getLastName().length() > trimmed.length()) {
+            errors.rejectValue("lastName", "Error.register.lastName.spaces");
+        }
     }
 }
