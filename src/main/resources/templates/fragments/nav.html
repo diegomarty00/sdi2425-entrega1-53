@@ -18,7 +18,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/user/list">Ver usuarios</a>
-                    <a class="dropdown-item" href="/user/register">Registrar usuario</a>
+                    <a class="dropdown-item" href="/signup">Registrar usuario</a>
                 </div>
             </li>
         </ul>
@@ -39,19 +39,29 @@
                     </a>
                 </div>
             </li>
+
             <li sec:authorize="!isAuthenticated()" class="nav-item">
-            <li class="nav-item">
+                <a class="nav-link" href="/signup">
+                    <i class='fas fa-user-alt' style='font-size:16px'></i>
+                    <span th:text="#{register.message}"></span>
+                </a>
+            </li>
+
+
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
                 <a class="nav-link" id="loginDropdown" href="/login">
                     <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
                     <span th:text="#{login.message}"></span>
                 </a>
             </li>
+
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/logout">
                     <i class='fas fa-sign-out-alt' style='font-size:16px'></i>
                     <span>Desconectar</span>
                 </a>
             </li>
+
         </ul>
     </div>
 </nav>
