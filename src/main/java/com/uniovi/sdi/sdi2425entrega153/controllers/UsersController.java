@@ -60,6 +60,7 @@ public class UsersController {
         return "redirect:/user/details/" + id;
     }
 
+    /*
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     public String register(@Validated User user, BindingResult result) {
         registerFormValidator.validate(user, result);
@@ -70,6 +71,25 @@ public class UsersController {
         user.setPassword(usersService.generateUserPassword());
         usersService.addUser(user);
         System.out.println(user.getPassword());
+        return "redirect:home";
+    } */
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String getSignupPage(Model model) {
+        model.addAttribute("user", new User());
+        return "signup";
+    }
+
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@Validated User user, BindingResult result) { //@ModelAttribute("user") User user, Model model
+        registerFormValidator.validate(user, result);
+        if (result.hasErrors()) {
+            return "signup";
+        }
+
+        user.setRole(rolesService.getRoles()[0]);
+        usersService.addUser(user);
+        securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
     }
 
@@ -83,17 +103,17 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String dni = auth.getName();
         User activeUser = usersService.getUserByDni(dni);
-        //Page<Mark> marks = marksService.getMarksForUser(pageable, activeUser);
-        //model.addAttribute("marksList", marks.getContent());
-        //model.addAttribute("page", marks);
+
+        model.addAttribute("user", activeUser);
         return "home";
     }
 
+    /*
     @RequestMapping(value = "/user/register", method = RequestMethod.GET)
     public String register(Model model) {
         model.addAttribute("user", new User());
         return "user/register";
-    }
+    } */
 
     @RequestMapping("/user/list/update")
     public String updateList(Model model) {
