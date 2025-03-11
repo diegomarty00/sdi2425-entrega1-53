@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.repositories;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.Path;
+import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
