@@ -45,6 +45,10 @@ public class UsersService {
         usersRepository.save(user);
     }
 
+    public void editUser(User user) {
+        usersRepository.save(user);
+    }
+
     public String generateUserPassword() {
         PasswordGenerator generator = new PasswordGenerator();
 
