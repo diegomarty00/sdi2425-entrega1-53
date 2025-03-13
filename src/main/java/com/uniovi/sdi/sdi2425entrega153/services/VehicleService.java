@@ -26,4 +26,12 @@ public class VehicleService {
         vehicleRepository.save(vehicle);
     }
 
+    public Vehicle findByPlate(String plate) {
+        return vehicleRepository.findByPlate(plate);
+    }
+
+    public Vehicle findByChassisNumber(String chassisNumber) {
+        return vehicleRepository.findByChassisNumber(chassisNumber);
+    }
+
 }

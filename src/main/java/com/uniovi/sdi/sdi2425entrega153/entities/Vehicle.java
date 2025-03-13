@@ -11,6 +11,7 @@ public class Vehicle {
 
     @Id
     private String plate;           // Matrícula
+    @Column(unique = true)
     private String chassisNumber;   // Número de bastidor
     private String brandName;       // Marca
     private String model;           // Modelo

@@ -9,6 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
 
+    Vehicle findByPlate(String plate);
+
+    Vehicle findByChassisNumber(String chassisNumber);
+
     @Query("SELECT r FROM Path r WHERE r.vehicleRegistration = ?1 ORDER BY r.id ASC")
     Page<Vehicle> findAllByVehicle(Pageable pageable, Vehicle Vehicle);
 
