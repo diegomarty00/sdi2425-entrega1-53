@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface VehicleRepository extends CrudRepository<Path, Long> {
+public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
 
     @Query("SELECT r FROM Path r WHERE r.vehicleRegistration = ?1 ORDER BY r.id ASC")
-    Page<Path> findAllByVehicle(Pageable pageable, Vehicle Vehicle);
+    Page<Vehicle> findAllByVehicle(Pageable pageable, Vehicle Vehicle);
 
-    Page<Path> findAll(Pageable pageable);
+    Page<Vehicle> findAll(Pageable pageable);
 }
