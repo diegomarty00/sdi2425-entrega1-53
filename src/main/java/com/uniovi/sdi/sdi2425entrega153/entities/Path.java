@@ -15,6 +15,8 @@ public class Path {
     private double finalConsumption;     // Consumo despues del recorrido
     private String vehicleRegistration; // Matricula del coche
     private double kilometers;          // Kilometros del trayecto
+    @Column(name = "user_dni")
+    private String userDni;
 
     public Path(){}
 
@@ -29,7 +31,13 @@ public class Path {
         this.vehicleRegistration = vehicleRegistration;
         this.kilometers = kilometers;
     }
+    public String getUserDni() {
+        return userDni;
+    }
 
+    public void setUserDni(String userDni) {
+        this.userDni = userDni;
+    }
     public Long getId() {
         return id;
     }

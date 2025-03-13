@@ -1,0 +1,45 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <title>Finalizar trayecto</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <!-- JS files: jQuery first, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<h1>Finalizar Trayecto</h1>
+
+<!-- Se muestra información del trayecto activo -->
+<div>
+  <p>Vehículo: <span th:text="${activePath.vehicleRegistration}"></span></p>
+  <p>Odómetro inicial: <span th:text="${activePath.initialConsumption}"></span></p>
+</div>
+
+<!-- Formulario para finalizar trayecto -->
+<form th:action="@{/path/end}" method="post">
+  <div>
+    <label for="finalOdometer">Odómetro Final:</label>
+    <input type="number" step="0.1" id="finalOdometer" name="finalOdometer" placeholder="Valor final del odómetro" required />
+  </div>
+  <div>
+    <label for="observations">Observaciones (opcional):</label>
+    <textarea id="observations" name="observations" placeholder="Observaciones..."></textarea>
+  </div>
+  <button type="submit">Finalizar Trayecto</button>
+</form>
+
+<!-- Mostrar errores, si existen -->
+<div th:if="${error != null}">
+  <p th:text="${error}" style="color: red;"></p>
+</div>
+</body>
+</html>
