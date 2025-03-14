@@ -16,6 +16,8 @@ public class User {
     private String password;
     @Transient
     private String passwordConfirm;
+    @Transient
+    private String oldPassword;
     private String role;
 
     //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -73,6 +75,10 @@ public class User {
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
     }
+
+    public String getOldPassword() { return oldPassword; }
+
+    public void setOldPassword(String oldPassword) { this.oldPassword = oldPassword; }
 
     public String getRole() {
         return role;
