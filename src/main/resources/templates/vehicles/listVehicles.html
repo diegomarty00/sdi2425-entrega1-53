@@ -2,6 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
+
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
 <div class="container">
@@ -12,39 +13,48 @@
 
     <div class="table-responsive">
 
+        <!-- Botón para actualizar la lista -->
         <button type="button" id="updateButton" class="btn btn-primary">Actualizar</button>
 
         <script>
-            $( "#updateButton" ).click(function() {
-                $("#usersTable").load('/vehicle/list/update');
+            $("#updateButton").click(function() {
+                $("#vehiclesTable").load('/vehicle/list/update');
             });
         </script>
 
-        <table class="table table-hover" th:fragment="vehiclesTable" id="vehiclesTable">
+        <!-- Formulario para eliminar vehículos seleccionados -->
+        <form id="deleteForm" method="post" action="/vehicle/delete" onsubmit="return validateDeleteForm();">
+            <button type="submit" class="btn btn-danger">
+                Eliminar seleccionados
+            </button>
 
-            <thead>
-            <tr>
-                <th scope="col">Mtrícula</th>
-                <th scope="col">Número de bastidor</th>
-                <th scope="col">Marca</th>
-                <th scope="col">Modelo</th>
-                <th scope="col">Combustible</th>
-
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="vehicle : ${vehicles}">
-                <td th:text="${vehicle.plate}"></td>
-                <td th:text="${vehicle.chassisNumber}"></td>
-                <td th:text="${vehicle.brandName}"></td>
-                <td th:text="${vehicle.model}"></td>
-                <td th:text="${vehicle.fuelType}"></td>
-
-            </tr>
-            </tbody>
-
-        </table>
+            <table class="table table-hover" id="vehiclesTable">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        <input type="checkbox" id="selectAll">
+                    </th>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Número de bastidor</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Combustible</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="vehicle : ${vehicles}">
+                    <td>
+                        <input type="checkbox" name="selectedVehicles" th:value="${vehicle.plate}">
+                    </td>
+                    <td th:text="${vehicle.plate}"></td>
+                    <td th:text="${vehicle.chassisNumber}"></td>
+                    <td th:text="${vehicle.brandName}"></td>
+                    <td th:text="${vehicle.model}"></td>
+                    <td th:text="${vehicle.fuelType}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
 
     </div>
 
@@ -52,5 +62,24 @@
 
 </div>
 <footer th:replace="fragments/footer"/>
+
+<script>
+    // Función para validar que al menos un checkbox esté seleccionado antes de enviar
+    function validateDeleteForm() {
+        let checkboxes = document.querySelectorAll("input[name='selectedVehicles']:checked");
+        if (checkboxes.length === 0) {
+            alert("Debes seleccionar al menos un vehículo para eliminar.");
+            return false; // Evita el envío del formulario
+        }
+        return confirm("¿Estás seguro de eliminar los vehículos seleccionados?");
+    }
+
+    // Funcionalidad de "Seleccionar todos"
+    document.getElementById("selectAll").addEventListener("change", function() {
+        let checkboxes = document.querySelectorAll("input[name='selectedVehicles']");
+        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    });
+</script>
+
 </body>
 </html>

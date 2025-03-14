@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class VehicleController {
@@ -30,6 +33,12 @@ public class VehicleController {
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
         return "vehicles/listVehicles";
+    }
+
+    @RequestMapping(value = "/vehicle/delete", method = RequestMethod.POST)
+    public String deleteVehicles(@RequestParam("selectedVehicles") List<String> plates) {
+        vehicleService.deleteVehicles(plates);
+        return "redirect:/vehicle/list";
     }
 
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
@@ -60,6 +69,8 @@ public class VehicleController {
         model.addAttribute("vehicles", vehicles.getContent());
         return "vehicle/list :: vehiclesTable";
     }
+
+
 
 
 

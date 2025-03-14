@@ -34,4 +34,19 @@ public class VehicleService {
         return vehicleRepository.findByChassisNumber(chassisNumber);
     }
 
+    public void deleteVehicles(List<String> plates) {
+
+        for (String plate : plates) {
+
+            Vehicle vehicle = vehicleRepository.findByPlate(plate);
+
+            if (vehicle != null) {
+                vehicleRepository.delete(vehicle);
+            }
+        }
+    }
+
+
+
+
 }
