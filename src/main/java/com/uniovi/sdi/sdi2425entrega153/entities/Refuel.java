@@ -11,6 +11,7 @@ public class Refuel {
     @GeneratedValue
     private Long id;
 
+
     private String stationName;
     private double fuelPrice;
     private double fuelQuantity;
@@ -18,6 +19,45 @@ public class Refuel {
     private double odometer;
     private Date dateTime;
     private String observations;
+
+    @ManyToOne
+    @JoinColumn(name = "vehicle_plate")
+    private Vehicle vehicle;
+
+    public Refuel() {}
+
+    public Refuel(Long id, String stationName, double fuelPrice,
+                  double fuelQuantity, double odometer, Date dateTime,
+                  String observations) {
+        this.id = id;
+        this.stationName = stationName;
+        this.fuelPrice = fuelPrice;
+        this.fuelQuantity = fuelQuantity;
+        this.odometer = odometer;
+        this.dateTime = dateTime;
+        this.observations = observations;
+    }
+
+    public Refuel(String stationName, double fuelPrice,
+                  double fuelQuantity, double odometer, Date dateTime,
+                  String observations, Vehicle vehicle) {
+        super();
+        this.stationName = stationName;
+        this.fuelPrice = fuelPrice;
+        this.fuelQuantity = fuelQuantity;
+        this.odometer = odometer;
+        this.dateTime = dateTime;
+        this.observations = observations;
+        this.vehicle = vehicle;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 
     public Long getId() {
         return id;
