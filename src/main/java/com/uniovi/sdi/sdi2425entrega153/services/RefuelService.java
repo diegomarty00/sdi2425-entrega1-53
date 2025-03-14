@@ -1,6 +1,5 @@
 package com.uniovi.sdi.sdi2425entrega153.services;
 
-import com.uniovi.sdi.sdi2425entrega153.entities.Path;
 import com.uniovi.sdi.sdi2425entrega153.entities.Refuel;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;

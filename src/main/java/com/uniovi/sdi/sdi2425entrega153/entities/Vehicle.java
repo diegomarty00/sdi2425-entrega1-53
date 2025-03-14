@@ -1,8 +1,10 @@
 package com.uniovi.sdi.sdi2425entrega153.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
+@Table(name="vehicle")
 public class Vehicle {
 
     public enum FUEL_TYPES {
@@ -18,6 +20,9 @@ public class Vehicle {
 
     @Enumerated(EnumType.STRING)
     private FUEL_TYPES fuelType;
+
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    private Set<Refuel> refuels;
 
     public Vehicle() {}
 

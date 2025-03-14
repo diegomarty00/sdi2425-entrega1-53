@@ -12,6 +12,7 @@ public class Refuel {
     // Campo para almacenar la matrícula del vehículo
     private String vehicleRegistration;
 
+
     private String stationName;
     private double fuelPrice;
     private double fuelQuantity;
@@ -22,15 +23,16 @@ public class Refuel {
     private Date dateTime;
     private String observations;
 
-    // Relación con la entidad Vehicle
+
     @ManyToOne
     @JoinColumn(name = "vehicle_plate")
     private Vehicle vehicle;
 
+
     // Constructor vacío
     public Refuel() {}
 
-    // Constructor sin la relación a Vehicle (útil si no se requiere vinculación directa)
+
     public Refuel(Long id, String stationName, double fuelPrice,
                   double fuelQuantity, double odometer, Date dateTime,
                   String observations) {
@@ -43,10 +45,12 @@ public class Refuel {
         this.observations = observations;
     }
 
-    // Constructor completo, con relación a Vehicle
+
     public Refuel(String stationName, double fuelPrice,
                   double fuelQuantity, double odometer, Date dateTime,
                   String observations, Vehicle vehicle) {
+        super();
+
         this.stationName = stationName;
         this.fuelPrice = fuelPrice;
         this.fuelQuantity = fuelQuantity;
@@ -56,7 +60,13 @@ public class Refuel {
         this.vehicle = vehicle;
     }
 
-    // Getters y setters
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
 
     public Long getId() {
         return id;
