@@ -35,11 +35,7 @@ public class VehicleController {
         return "vehicles/listVehicles";
     }
 
-    @RequestMapping(value = "/vehicle/delete", method = RequestMethod.POST)
-    public String deleteVehicles(@RequestParam("selectedVehicles") List<String> plates) {
-        vehicleService.deleteVehicles(plates);
-        return "redirect:/vehicle/list";
-    }
+
 
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
     public String register(@Validated Vehicle vehicle, BindingResult result, Model model) { //@ModelAttribute Vehicle vehicle
@@ -73,6 +69,11 @@ public class VehicleController {
 
 
 
+    @RequestMapping(value = "/vehicle/delete", method = RequestMethod.POST)
+    public String deleteVehicles(@RequestParam("selectedVehicles") List<String> plates) {
+        vehicleService.deleteVehicles(plates);
+        return "redirect:/vehicle/list";
+    }
 
 
 }
