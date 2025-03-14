@@ -55,4 +55,9 @@ public class VehicleService {
                 .filter(vehicle -> !pathService.hasActivePathForVehicle(vehicle.getPlate()))
                 .collect(Collectors.toList());
     }
+
+    public Page<Vehicle> findFree(Pageable pageable) {
+        Page<Vehicle> vehicles = vehicleRepository.findFree(pageable);
+        return vehicles;
+    }
 }

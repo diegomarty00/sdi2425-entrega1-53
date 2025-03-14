@@ -25,22 +25,22 @@
             <thead>
             <tr>
                 <th scope="col">Matrícula</th>
-                <th scope="col">Número de bastidor</th>
                 <th scope="col">Marca</th>
                 <th scope="col">Modelo</th>
-                <th scope="col">Combustible</th>
-
+                <th scope="col">Odómetro</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
 
             <tbody>
             <tr th:each="vehicle : ${vehicles}">
                 <td th:text="${vehicle.plate}"></td>
-                <td th:text="${vehicle.chassisNumber}"></td>
                 <td th:text="${vehicle.brandName}"></td>
                 <td th:text="${vehicle.model}"></td>
-                <td th:text="${vehicle.fuelType}"></td>
-
+                <td th:text="${vehicle.odometer}"></td>
+                <td><a th:href="${'/vehicle/refuel/' + vehicle.id}" th:text="#{list.vehicle.refuels}">refuels</a></td>
+                <td><a th:href="${'/vehicle/paths/' + vehicle.id}" th:text="#{list.vehicle.paths}">paths</a></td>
             </tr>
             </tbody>
 

@@ -42,6 +42,14 @@ public class VehicleController {
         return "vehicles/listVehicles";
     }
 
+    @RequestMapping("/vehicle/free")
+    public String listVehicleFree(Model model, Pageable pageable) {
+        Page<Vehicle> vehicles = vehicleService.findFree(pageable);
+        model.addAttribute("vehicles", vehicles.getContent());
+        model.addAttribute("page", vehicles);
+        return "vehicles/listFreeVehicles";
+    }
+
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
     public String register(@Validated Vehicle vehicle, BindingResult result, Model model) { //@ModelAttribute Vehicle vehicle
         vehicleRegistrationValidation.validate(vehicle, result);

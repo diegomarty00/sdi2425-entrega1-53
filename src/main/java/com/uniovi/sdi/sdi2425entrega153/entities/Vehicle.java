@@ -12,28 +12,54 @@ public class Vehicle {
     }
 
     @Id
+    @GeneratedValue
+    private Long id;
     private String plate;           // Matrícula
     @Column(unique = true)
     private String chassisNumber;   // Número de bastidor
     private String brandName;       // Marca
     private String model;           // Modelo
+    private double odometer;
 
     @Enumerated(EnumType.STRING)
     private FUEL_TYPES fuelType;
+    private boolean isFree;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     private Set<Refuel> refuels;
 
     public Vehicle() {}
 
-    public Vehicle(String plate, String chassisNumber, String brandName, String model, FUEL_TYPES fuelType) {
+    public Vehicle(Long id, String plate, String chassisNumber, String brandName, String model, FUEL_TYPES fuelType, double odometer) {
+        this.id = id;
         this.plate = plate;
         this.chassisNumber = chassisNumber;
         this.brandName = brandName;
         this.model = model;
         this.fuelType = fuelType;
+        this.isFree = true;
+        this.odometer = odometer;
     }
 
+    public Vehicle(String plate, String chassisNumber, String brandName, String model, FUEL_TYPES fuelType, double odometer) {
+        super();
+        this.plate = plate;
+        this.chassisNumber = chassisNumber;
+        this.brandName = brandName;
+        this.model = model;
+        this.fuelType = fuelType;
+        this.isFree = true;
+        this.odometer = odometer;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getPlate() {
         return plate;
@@ -73,6 +99,14 @@ public class Vehicle {
 
     public void setFuelType(FUEL_TYPES fuelType) {
         this.fuelType = fuelType;
+    }
+
+    public double getOdometer() {
+        return odometer;
+    }
+
+    public void setOdometer(double odometer) {
+        this.odometer = odometer;
     }
 
 }
