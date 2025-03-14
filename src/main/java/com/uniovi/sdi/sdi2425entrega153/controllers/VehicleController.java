@@ -2,19 +2,16 @@ package com.uniovi.sdi.sdi2425entrega153.controllers;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.Path;
 import com.uniovi.sdi.sdi2425entrega153.entities.Refuel;
-import com.uniovi.sdi.sdi2425entrega153.entities.User;
 import com.uniovi.sdi.sdi2425entrega153.services.PathService;
 import com.uniovi.sdi.sdi2425entrega153.services.RefuelService;
 import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import com.uniovi.sdi.sdi2425entrega153.validators.VehicleRegistrationValidation;
-import com.uniovi.sdi.sdi2425entrega153.validators.VehicleValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
@@ -25,7 +22,6 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     private final VehicleRegistrationValidation vehicleRegistrationValidation;
-    private final VehicleValidator vehicleValidator;
     private final PathService pathService;
     private final RefuelService refuelService;
 
@@ -35,7 +31,6 @@ public class VehicleController {
         this.vehicleService = vehicleService;
         this.pathService = pathService;
         this.refuelService = refuelService;
-        this.vehicleValidator = new VehicleValidator();
         this.vehicleRegistrationValidation = vehicleRegistrationValidation;
     }
 
