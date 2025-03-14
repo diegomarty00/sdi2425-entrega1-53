@@ -3,6 +3,8 @@ package com.uniovi.sdi.sdi2425entrega153.services;
 import java.util.*;
 
 import org.passay.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.uniovi.sdi.sdi2425entrega153.entities.*;
@@ -25,9 +27,8 @@ public class UsersService {
     public void init() {
     }
 
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<User>();
-        usersRepository.findAll().forEach(users::add);
+    public Page<User> getUsers(Pageable pageable) {
+        Page<User> users = usersRepository.findAll(pageable);
         return users;
     }
 
@@ -44,6 +45,10 @@ public class UsersService {
         usersRepository.save(user);
     }
 
+    public void editUser(User user) {
+        usersRepository.save(user);
+    }
+
     public String generateUserPassword() {
         PasswordGenerator generator = new PasswordGenerator();
 
@@ -56,5 +61,21 @@ public class UsersService {
         }, 2);
 
         return generator.generatePassword(12, Arrays.asList(upperCaseRule, lowerCaseRule, digitRule, specialRule));
+    }
+
+    public void changePassword(User user) {
+        String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        usersRepository.updatePasswordByDni(user.getDni(), newPassword);
+    }
+
+    public boolean checkValidPassword(String password) {
+        if(password.length() < 12) return false;
+
+        boolean hasLower = password.matches(".*[a-z].*");
+        boolean hasUpper = password.matches(".*[A-Z].*");
+        boolean hasDigit = password.matches(".*\\d.*");
+        boolean hasSpecial = password.matches(".*[!@#$%^&*(),.?\":{}|<>-_].*");
+
+        return hasLower && hasUpper && hasDigit && hasSpecial;
     }
 }

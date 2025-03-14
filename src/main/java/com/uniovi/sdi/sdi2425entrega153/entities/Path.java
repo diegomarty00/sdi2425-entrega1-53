@@ -18,6 +18,10 @@ public class Path {
     @Column(name = "user_dni")
     private String userDni;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Path(){}
 
     public Path(Long id, Date startDate, double time,
@@ -33,6 +37,19 @@ public class Path {
     }
     public String getUserDni() {
         return userDni;
+    }
+
+    public Path(Date startDate, double time,
+                double initialConsumption, double finalConsumption,
+                String vehicleRegistration, double kilometers, User user) {
+        super();
+        this.startDate = startDate;
+        this.time = time;
+        this.initialConsumption = initialConsumption;
+        this.finalConsumption = finalConsumption;
+        this.vehicleRegistration = vehicleRegistration;
+        this.kilometers = kilometers;
+        this.user = new User();
     }
 
     public void setUserDni(String userDni) {
@@ -92,6 +109,14 @@ public class Path {
 
     public void setKilometers(double kilometers) {
         this.kilometers = kilometers;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
