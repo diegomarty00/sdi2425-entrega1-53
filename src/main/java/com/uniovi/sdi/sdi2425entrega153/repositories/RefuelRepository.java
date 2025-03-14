@@ -12,7 +12,6 @@ public interface RefuelRepository extends CrudRepository<Refuel, Long> {
 
     @Query("SELECT r FROM Refuel r WHERE r.vehicleRegistration = ?1 ORDER BY r.id ASC")
     Page<Refuel> findAllByVehicle(Pageable pageable, Vehicle Vehicle);
-}
 
     Page<Refuel> findAll(Pageable pageable);
 }

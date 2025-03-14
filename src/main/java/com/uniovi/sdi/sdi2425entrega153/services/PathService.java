@@ -20,23 +20,17 @@ import java.util.LinkedList;
 
 @Service
 public class PathService {
-    /* Inyección de dependencias basada en campos (opción no recomendada) */
-    @Autowired
-    private PathRepository pathRepository;
 
     private final PathRepository pathRepository;
-    /* Inyección de dependencias basada en constructor (opción recomendada)*/
     private final HttpSession httpSession;
-    @Autowired
-    private VehicleService vehicleService;
-    @Autowired
-    private VehicleRepository vehicleRepository;
+    private final VehicleRepository vehicleRepository;
 
-    public PathService(PathRepository pathRepository) {
-        this.pathRepository = pathRepository;
     @Autowired
-    public PathService(HttpSession httpSession) {
+    public PathService(PathRepository pathRepository, HttpSession httpSession,
+                        VehicleRepository vehicleRepository) {
+        this.pathRepository = pathRepository;
         this.httpSession = httpSession;
+        this.vehicleRepository = vehicleRepository;
     }
 
     /**
@@ -63,6 +57,7 @@ public class PathService {
         // return pathRepository.findByUserDniAndFinalConsumption(userDni, 0).orElse(null);
         // Si no tienes ese campo, debes adaptar la lógica para identificar el trayecto activo del usuario.
         return pathRepository.findByUserDniAndFinalConsumption(userDni, 0).orElse(null);
+    }
     public Page<Path> getPaths(Pageable pageable) {
         Page<Path> paths = pathRepository.findAll(pageable);
         return paths;
@@ -71,6 +66,7 @@ public class PathService {
     public Path getPath(Long id) {
         Path path = pathRepository.findById(id).isPresent() ? pathRepository.findById(id).get() : new Path();
         return path;
+    }
     /**
      * Obtiene el último odómetro finalizado para un vehículo.
      * Si no existe trayecto finalizado, retorna 0.
@@ -88,8 +84,10 @@ public class PathService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String dni = auth.getName();
         Path path = pathRepository.findById(id).get();
-        if(path.getUser().getDni().equals(dni) ) {
+        if (path.getUser().getDni().equals(dni)) {
             pathRepository.updateResend(revised, id);
+        }
+    }
     /**
      * Finaliza un trayecto activo.
      * Se actualiza el campo finalConsumption, se calcula el tiempo transcurrido y la distancia recorrida.
@@ -106,21 +104,7 @@ public class PathService {
     }
 
     public void addPath(Path path) {
-        // Si en Id es null le asignamos el ultimo + 1 de la lista
-        Path path = optPath.get();
-        if (finalOdometer <= path.getInitialConsumption()) {
-            throw new IllegalArgumentException("El odómetro final debe ser mayor que el inicial.");
-        }
-        // Actualiza el trayecto con el odómetro final
-        path.setFinalConsumption(finalOdometer);
-        // Calcula la duración en segundos del trayecto
-        long durationInSeconds = (new Date().getTime() - path.getStartDate().getTime()) / 1000;
-        path.setTime(durationInSeconds);
-        // Calcula los kilómetros recorridos
-        double kilometers = finalOdometer - path.getInitialConsumption();
-        path.setKilometers(kilometers);
-        // Si deseas almacenar observaciones, tendrías que agregar un campo en la entidad Path.
-        // Aquí se podría loggear o procesar la observación de otra forma.
+
         pathRepository.save(path);
     }
     /**

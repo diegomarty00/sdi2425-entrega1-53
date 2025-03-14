@@ -31,7 +31,6 @@ public interface PathRepository extends CrudRepository<Path, Long> {
     Optional<Path> findTopByVehicleRegistrationAndFinalConsumptionGreaterThanOrderByStartDateDesc(String vehicleRegistration, double finalConsumption);
     // Busca el trayecto activo para un usuario
     Optional<Path> findByUserDniAndFinalConsumption(String userDni, double finalConsumption);
-}
 
     @Modifying
     @Transactional

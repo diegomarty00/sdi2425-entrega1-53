@@ -10,7 +10,7 @@ public class Refuel {
     @Id
     @GeneratedValue
     private Long id;
-
+    private String vehicleRegistration;
     private String stationName;
     private double fuelPrice;
     private double fuelQuantity;
@@ -45,7 +45,13 @@ public class Refuel {
     public void setFuelPrice(double fuelPrice) {
         this.fuelPrice = fuelPrice;
     }
+    public String getVehicleRegistration() {
+        return vehicleRegistration;
+    }
 
+    public void setVehicleRegistration(String vehicleRegistration) {
+        this.vehicleRegistration = vehicleRegistration;
+    }
     public double getFuelQuantity() {
         return fuelQuantity;
     }
@@ -62,13 +68,6 @@ public class Refuel {
         this.fullTank = fullTank;
     }
 
-    public double getOdometer() {
-        return odometer;
-    }
-
-    public void setOdometer(double odometer) {
-        this.odometer = odometer;
-    }
 
     public Date getDateTime() {
         return dateTime;
