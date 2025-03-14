@@ -1,16 +1,17 @@
 package com.uniovi.sdi.sdi2425entrega153.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
-// Refuel.java
 @Entity
 public class Refuel {
     @Id
     @GeneratedValue
     private Long id;
+
+    // Campo para almacenar la matrícula del vehículo (opcional, si se necesita redundancia)
     private String vehicleRegistration;
+
     private String stationName;
     private double fuelPrice;
     private double fuelQuantity;
@@ -21,13 +22,56 @@ public class Refuel {
     private Date dateTime;
     private String observations;
 
+    // Relación con la entidad Vehicle
+    @ManyToOne
+    @JoinColumn(name = "vehicle_plate")
+    private Vehicle vehicle;
+
+    // Constructor vacío
+    public Refuel() {}
+
+    // Constructor sin la relación a Vehicle (útil si no se requiere vinculación directa)
+    public Refuel(Long id, String stationName, double fuelPrice,
+                  double fuelQuantity, double odometer, Date dateTime,
+                  String observations) {
+        this.id = id;
+        this.stationName = stationName;
+        this.fuelPrice = fuelPrice;
+        this.fuelQuantity = fuelQuantity;
+        this.odometer = odometer;
+        this.dateTime = dateTime;
+        this.observations = observations;
+    }
+
+    // Constructor completo, con relación a Vehicle
+    public Refuel(String stationName, double fuelPrice,
+                  double fuelQuantity, double odometer, Date dateTime,
+                  String observations, Vehicle vehicle) {
+        this.stationName = stationName;
+        this.fuelPrice = fuelPrice;
+        this.fuelQuantity = fuelQuantity;
+        this.odometer = odometer;
+        this.dateTime = dateTime;
+        this.observations = observations;
+        this.vehicle = vehicle;
+    }
+
     // Getters y setters
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getVehicleRegistration() {
+        return vehicleRegistration;
+    }
+
+    public void setVehicleRegistration(String vehicleRegistration) {
+        this.vehicleRegistration = vehicleRegistration;
     }
 
     public String getStationName() {
@@ -45,13 +89,7 @@ public class Refuel {
     public void setFuelPrice(double fuelPrice) {
         this.fuelPrice = fuelPrice;
     }
-    public String getVehicleRegistration() {
-        return vehicleRegistration;
-    }
 
-    public void setVehicleRegistration(String vehicleRegistration) {
-        this.vehicleRegistration = vehicleRegistration;
-    }
     public double getFuelQuantity() {
         return fuelQuantity;
     }
@@ -68,6 +106,13 @@ public class Refuel {
         this.fullTank = fullTank;
     }
 
+    public double getOdometer() {
+        return odometer;
+    }
+
+    public void setOdometer(double odometer) {
+        this.odometer = odometer;
+    }
 
     public Date getDateTime() {
         return dateTime;
@@ -85,12 +130,11 @@ public class Refuel {
         this.observations = observations;
     }
 
-    public double getOdometer() {
-        return odometer;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setOdometer(double odometer) {
-        this.odometer = odometer;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
-
 }

@@ -45,7 +45,7 @@ public class PathController {
      * GET /path/start
      * Muestra el formulario para iniciar un trayecto.
      */
-    @RequestMapping("/start")
+    @GetMapping("/start")
     public String showStartForm(Model model) {
         // Obtenemos la lista de vehículos disponibles (aquellos que no tienen un trayecto activo).
         List<Vehicle> availableVehicles = vehicleService.getAvailableVehicles();
@@ -59,7 +59,7 @@ public class PathController {
      * POST /path/start
      * Procesa el formulario para iniciar un trayecto.
      */
-    @RequestMapping("/start")
+    @PostMapping("/start")
     public String startPath(@ModelAttribute("path") Path path,
                             BindingResult result,
                             Principal principal,
