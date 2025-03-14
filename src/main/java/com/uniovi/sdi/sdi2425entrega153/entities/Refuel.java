@@ -60,14 +60,6 @@ public class Refuel {
         this.vehicle = vehicle;
     }
 
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-
     public Long getId() {
         return id;
     }
