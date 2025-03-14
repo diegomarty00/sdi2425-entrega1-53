@@ -1,10 +1,8 @@
 package com.uniovi.sdi.sdi2425entrega153.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
-// Refuel.java
 @Entity
 public class Refuel {
     @Id
@@ -16,9 +14,12 @@ public class Refuel {
     private double fuelQuantity;
     private boolean fullTank;
     private double odometer;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
     private String observations;
 
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -59,6 +60,14 @@ public class Refuel {
         this.fullTank = fullTank;
     }
 
+    public double getOdometer() {
+        return odometer;
+    }
+
+    public void setOdometer(double odometer) {
+        this.odometer = odometer;
+    }
+
     public Date getDateTime() {
         return dateTime;
     }
@@ -74,15 +83,4 @@ public class Refuel {
     public void setObservations(String observations) {
         this.observations = observations;
     }
-
-    public double getOdometer() {
-        return odometer;
-    }
-
-    public void setOdometer(double odometer) {
-        this.odometer = odometer;
-    }
-
 }
-
-
