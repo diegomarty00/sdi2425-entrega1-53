@@ -20,6 +20,10 @@ public class User {
     private String oldPassword;
     private String role;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Path> paths;
+
     //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     //private Set<Travle> travles;
 
@@ -85,5 +89,13 @@ public class User {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Path> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(Set<Path> paths) {
+        this.paths = paths;
     }
 }
