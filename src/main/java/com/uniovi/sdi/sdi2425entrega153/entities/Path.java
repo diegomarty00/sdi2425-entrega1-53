@@ -15,6 +15,12 @@ public class Path {
     private double finalConsumption;     // Consumo despues del recorrido
     private String vehicleRegistration; // Matricula del coche
     private double kilometers;          // Kilometros del trayecto
+    @Column(name = "user_dni")
+    private String userDni;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Path(){}
 
@@ -29,7 +35,26 @@ public class Path {
         this.vehicleRegistration = vehicleRegistration;
         this.kilometers = kilometers;
     }
+    public String getUserDni() {
+        return userDni;
+    }
 
+    public Path(Date startDate, double time,
+                double initialConsumption, double finalConsumption,
+                String vehicleRegistration, double kilometers, User user) {
+        super();
+        this.startDate = startDate;
+        this.time = time;
+        this.initialConsumption = initialConsumption;
+        this.finalConsumption = finalConsumption;
+        this.vehicleRegistration = vehicleRegistration;
+        this.kilometers = kilometers;
+        this.user = new User();
+    }
+
+    public void setUserDni(String userDni) {
+        this.userDni = userDni;
+    }
     public Long getId() {
         return id;
     }
@@ -84,6 +109,14 @@ public class Path {
 
     public void setKilometers(double kilometers) {
         this.kilometers = kilometers;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

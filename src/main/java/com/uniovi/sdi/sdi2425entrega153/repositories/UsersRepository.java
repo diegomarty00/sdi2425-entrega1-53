@@ -1,6 +1,8 @@
 package com.uniovi.sdi.sdi2425entrega153.repositories;
 
+import com.uniovi.sdi.sdi2425entrega153.entities.Path;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
+import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
