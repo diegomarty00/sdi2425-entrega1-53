@@ -4,6 +4,7 @@
 <body>
     <!-- Barra de Navegación superior -->
     <nav th:replace="fragments/nav"/>
+
     <div class="container">
         <h2 th:text="#{register.message}"></h2>
         <form class="form-horizontal" method="post" action="/user/register" th:object="${user}">
