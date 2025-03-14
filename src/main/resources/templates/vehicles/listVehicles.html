@@ -28,7 +28,7 @@
                 Eliminar seleccionados
             </button>
 
-<<<<<<< HEAD
+
             <table class="table table-hover" id="vehiclesTable">
                 <thead>
                 <tr>
@@ -40,6 +40,8 @@
                     <th scope="col">Marca</th>
                     <th scope="col">Modelo</th>
                     <th scope="col">Combustible</th>
+                    <th scope="col">Kilometraje</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -52,6 +54,8 @@
                     <td th:text="${vehicle.brandName}"></td>
                     <td th:text="${vehicle.model}"></td>
                     <td th:text="${vehicle.fuelType}"></td>
+                    <td th:text="${vehicle.odometer}"></td>
+
                 </tr>
                 </tbody>
             </table>

@@ -7,6 +7,7 @@ import com.uniovi.sdi.sdi2425entrega153.services.RefuelService;
 import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import com.uniovi.sdi.sdi2425entrega153.validators.VehicleRegistrationValidation;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +40,10 @@ public class VehicleController {
 
     @RequestMapping("/vehicle/list")
     public String list(Model model, Pageable pageable) {
-        Page<Vehicle> vehicles = vehicleService.findAll(pageable);
+
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 5);
+        Page<Vehicle> vehicles = vehicleService.findAll(pageableWithSize);
+
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
         return "vehicles/listVehicles";
