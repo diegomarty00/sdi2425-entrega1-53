@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.services;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
+import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,9 +14,12 @@ public class InsertSampleDataService {
     private final UsersService usersService;
     private final RolesService rolesService;
 
-    public InsertSampleDataService(UsersService usersService, RolesService rolesService) {
+    private final VehicleService vehicleService;
+
+    public InsertSampleDataService(UsersService usersService, RolesService rolesService, VehicleService vehicleService) {
         this.usersService = usersService;
         this.rolesService = rolesService;
+        this.vehicleService = vehicleService;
     }
 
     @PostConstruct
@@ -33,5 +37,8 @@ public class InsertSampleDataService {
         usersService.addUser(user1);
         usersService.addUser(user2);
         usersService.addUser(user3);
+
+        Vehicle v1 = new Vehicle("1111", "CHASIS", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
+        vehicleService.addVehicle(v1);
     }
 }
