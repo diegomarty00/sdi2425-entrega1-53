@@ -9,7 +9,7 @@ public class Refuel {
     @GeneratedValue
     private Long id;
 
-    // Campo para almacenar la matrícula del vehículo (opcional, si se necesita redundancia)
+    // Campo para almacenar la matrícula del vehículo
     private String vehicleRegistration;
 
     private String stationName;
