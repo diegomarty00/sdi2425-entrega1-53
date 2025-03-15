@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -135,9 +134,9 @@ public class PathService {
     }
 
 
-    public Page<Path> findByPlate(String id, Pageable pageable) {
-        Vehicle vehicle = vehicleRepository.findByPlate(id);
-        Page<Path> paths = pathRepository.findAllByVehicle(pageable, vehicle);
+
+    public Page<Path> findByVehiclePlate(String plate, Pageable pageable) {
+        Page<Path> paths = pathRepository.findAllByVehiclePlate(pageable, plate);
         return paths;
     }
 }

@@ -76,4 +76,9 @@ public class VehicleService {
         return vehicles;
     }
 
+    public Vehicle getVehicle(Long id) {
+        Vehicle vehicle = vehicleRepository.findById(id).isPresent() ? vehicleRepository.findById(id).get() : new Vehicle();
+        return vehicle;
+    }
+
 }
