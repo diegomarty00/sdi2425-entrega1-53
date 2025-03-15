@@ -11,6 +11,7 @@ import org.springframework.validation.Validator;
 public class EditFormValidator implements Validator {
 
     private final UsersService usersService;
+    private String oldDni;
 
     public EditFormValidator(UsersService usersService) {
         this.usersService = usersService;
@@ -19,6 +20,11 @@ public class EditFormValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
         return User.class.equals(aClass);
+    }
+
+    public void validate(Object target, Errors errors, String oldDni) {
+        this.oldDni = oldDni;
+        validate(target, errors);
     }
 
     @Override
@@ -43,6 +49,10 @@ public class EditFormValidator implements Validator {
                     valid = false;
                 }
             }
+        }
+
+        if (valid && !user.getDni().equals(oldDni) && usersService.getUserByDni(user.getDni()) != null) {
+            errors.rejectValue("dni", "Error.register.dni.duplicate");
         }
 
         trimmed = user.getName().trim();
