@@ -52,12 +52,19 @@ public class VehicleController {
 
     @RequestMapping("/vehicle/free")
     public String listVehicleFree(Model model, Pageable pageable) {
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 5);
         Page<Vehicle> vehicles = vehicleService.findFree(pageable);
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
         return "vehicles/listFreeVehicles";
     }
 
+    @RequestMapping("/vehicle/free/update")
+    public String updateFree(Model model, Pageable pageable) {
+        Page<Vehicle> vehicles = vehicleService.findFree(pageable);
+        model.addAttribute("vehicles", vehicles.getContent());
+        return "vehicle/free :: vehiclesTable";
+    }
 
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
     public String register(@Validated Vehicle vehicle, BindingResult result, Model model) { //@ModelAttribute Vehicle vehicle
@@ -100,7 +107,7 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.findByPlate(id);
         model.addAttribute("vehicle", vehicleService.findByPlate(id));
         model.addAttribute("paths", paths);
-        return "vehicle/path";
+        return "vehicle/paths";
     }
 
     @RequestMapping("/vehicle/refuels/{id}")

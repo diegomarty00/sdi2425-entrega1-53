@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
+<!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
-<script>
-    document.getElementById('home').classList.add('active');
-</script>
-<div class="container" style="text-align: center">
+<div class="container">
+
+    <h2>Trayectos</h2>
+
+    <p>Losa trayectos personales que has realizado son los siguientes:</p>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover" th:fragment="pathsTable" id="pathsTable">
+
+            <thead>
+            <tr>
+                <th scope="col">Fecha de inicio</th>
+                <th scope="col">Hora de inicio</th>
+                <th scope="col">Matrícula</th>
+                <th scope="col">Duración (horas)</th>
+                <th scope="col">Odómetro inicio</th>
+                <th scope="col">Odómetro final</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="path : ${pathList}">
+                <td th:text="${path.getOnlyDate()}"></td>
+                <td th:text="${path.getOnlyTime()}"></td>
+                <td th:text="${path.vehicleRegistration}"></td>
+                <td th:text="${path.time}"></td>
+                <td th:text="${path.initialConsumption}"></td>
+                <td th:text="${path.finalConsumption}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <footer th:replace="fragments/pagination"/>
 
 </div>
 <footer th:replace="fragments/footer"/>

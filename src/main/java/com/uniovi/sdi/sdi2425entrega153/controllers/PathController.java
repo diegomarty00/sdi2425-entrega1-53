@@ -9,6 +9,7 @@ import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import com.uniovi.sdi.sdi2425entrega153.validators.PathValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,17 +90,18 @@ public class PathController {
     }
 
     /**
-     * GET /path/personal
+     * GET /path/list
      * Lista los trayectos personales del usuario autenticado.
      */
-    @GetMapping("/personal")
+    @GetMapping("/list")
     public String getList(Model model, Pageable pageable, Principal principal) {
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 5);
         String dni = principal.getName();
         User user = usersService.getUserByDni(dni);
         Page<Path> paths = pathService.getPathsForUser(pageable, user);
         model.addAttribute("pathList", paths.getContent());
         model.addAttribute("page", paths);
-        return "path/personal";
+        return "path/list";
     }
 
     /**

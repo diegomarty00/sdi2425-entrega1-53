@@ -130,10 +130,7 @@ public class PathService {
 
     public Page<Path> getPathsForUser(Pageable pageable, User user) {
         Page<Path> paths = new PageImpl<Path>(new LinkedList<Path>());
-        if (user.getRole().equals("ROLE_STUDENT")) {
-            paths = pathRepository.findAllByUser(pageable, user);}
-        if (user.getRole().equals("ROLE_PROFESSOR")) {
-            paths = getPaths(pageable); }
+        paths = pathRepository.findAllByUser(pageable, user);
         return paths;
     }
 

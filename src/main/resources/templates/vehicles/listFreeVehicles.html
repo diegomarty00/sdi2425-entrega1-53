@@ -8,7 +8,7 @@
 
     <h2>Vehículos</h2>
 
-    <p>Los vehículos que actualmente figuran en el sistema son los siguientes:</p>
+    <p>Los vehículos que actualmente figuran en el sistema como disponibles son los siguientes:</p>
 
     <div class="table-responsive">
 
@@ -16,7 +16,7 @@
 
         <script>
             $( "#updateButton" ).click(function() {
-                $("#usersTable").load('/vehicle/list/update');
+                $("#vehiclesTable").load('/vehicle/free/update');
             });
         </script>
 
