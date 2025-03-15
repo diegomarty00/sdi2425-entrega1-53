@@ -78,7 +78,7 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
-        return "redirect:/home";
+        return "redirect:/user/list";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.POST)
