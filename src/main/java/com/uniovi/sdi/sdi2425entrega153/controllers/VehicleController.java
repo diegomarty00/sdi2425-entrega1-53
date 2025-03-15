@@ -7,6 +7,7 @@ import com.uniovi.sdi.sdi2425entrega153.services.RefuelService;
 import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import com.uniovi.sdi.sdi2425entrega153.validators.VehicleRegistrationValidation;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class VehicleController {
@@ -36,11 +40,15 @@ public class VehicleController {
 
     @RequestMapping("/vehicle/list")
     public String list(Model model, Pageable pageable) {
-        Page<Vehicle> vehicles = vehicleService.findAll(pageable);
+
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 5);
+        Page<Vehicle> vehicles = vehicleService.findAll(pageableWithSize);
+
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
         return "vehicles/listVehicles";
     }
+
 
     @RequestMapping("/vehicle/free")
     public String listVehicleFree(Model model, Pageable pageable) {
@@ -49,6 +57,7 @@ public class VehicleController {
         model.addAttribute("page", vehicles);
         return "vehicles/listFreeVehicles";
     }
+
 
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
     public String register(@Validated Vehicle vehicle, BindingResult result, Model model) { //@ModelAttribute Vehicle vehicle
@@ -102,5 +111,12 @@ public class VehicleController {
         model.addAttribute("refuels", refuels);
         return "vehicle/refuels";
     }
+
+    @RequestMapping(value = "/vehicle/delete", method = RequestMethod.POST)
+    public String deleteVehicles(@RequestParam("selectedVehicles") List<String> plates) {
+        vehicleService.deleteVehicles(plates);
+        return "redirect:/vehicle/list";
+    }
+
 
 }
