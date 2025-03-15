@@ -41,6 +41,7 @@
                     <th scope="col">Modelo</th>
                     <th scope="col">Combustible</th>
                     <th scope="col">Kilometraje</th>
+                    <th scope="col">Estado</th>
 
                 </tr>
                 </thead>
@@ -55,6 +56,7 @@
                     <td th:text="${vehicle.model}"></td>
                     <td th:text="${vehicle.fuelType}"></td>
                     <td th:text="${vehicle.odometer}"></td>
+                    <td th:text="${vehicle.isFreeToString}"></td>
 
                 </tr>
                 </tbody>
@@ -69,7 +71,7 @@
 <footer th:replace="fragments/footer"/>
 
 <script>
-    // Función para validar que al menos un checkbox esté seleccionado antes de enviar
+    //validar que al menos un checkbox esté seleccionado antes de enviar
     function validateDeleteForm() {
         let checkboxes = document.querySelectorAll("input[name='selectedVehicles']:checked");
         if (checkboxes.length === 0) {
@@ -79,7 +81,7 @@
         return confirm("¿Estás seguro de eliminar los vehículos seleccionados?");
     }
 
-    // Funcionalidad de "Seleccionar todos"
+    //"Seleccionar todos"
     document.getElementById("selectAll").addEventListener("change", function() {
         let checkboxes = document.querySelectorAll("input[name='selectedVehicles']");
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);

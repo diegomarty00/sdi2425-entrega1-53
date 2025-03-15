@@ -109,4 +109,9 @@ public class Vehicle {
         this.odometer = odometer;
     }
 
+    public String getIsFreeToString(){
+        if (isFree) return "Libre";
+        else return "Ocupado";
+    }
+
 }
