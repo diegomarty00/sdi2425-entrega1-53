@@ -20,7 +20,7 @@ import java.util.LinkedList;
 
 @Service
 public class RefuelService {
-    /* Inyección de dependencias basada en campos (opción no recomendada) */
+
     @Autowired
     private RefuelRepository refuelRepository;
 
