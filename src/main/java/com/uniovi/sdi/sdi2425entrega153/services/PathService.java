@@ -52,10 +52,7 @@ public class PathService {
      * @return Trayecto activo o null si no existe.
      */
     public Path getActivePathForUser(String userDni) {
-        // Esta implementación depende de que la entidad Path tenga el campo "userDni".
-        // Ejemplo:
-        // return pathRepository.findByUserDniAndFinalConsumption(userDni, 0).orElse(null);
-        // Si no tienes ese campo, debes adaptar la lógica para identificar el trayecto activo del usuario.
+
         return pathRepository.findByUserDniAndFinalConsumption(userDni, 0).orElse(null);
     }
     public Page<Path> getPaths(Pageable pageable) {
