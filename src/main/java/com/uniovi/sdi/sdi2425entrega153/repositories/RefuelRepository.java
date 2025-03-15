@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 // RefuelRepository.java
 public interface RefuelRepository extends CrudRepository<Refuel, Long> {
 
-    @Query("SELECT r FROM Refuel r WHERE r.vehicle = ?1 ORDER BY r.id ASC")
+    @Query("SELECT r FROM Refuel r WHERE r.vehicle.plate = ?1 ORDER BY r.id ASC")
     Page<Refuel> findAllByVehiclePlate(Pageable pageable, String plate);
 
     Page<Refuel> findAll(Pageable pageable);

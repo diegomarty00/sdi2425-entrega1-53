@@ -109,7 +109,8 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.getVehicle(id);
         Page<Refuel> refuels = refuelService.findByVehiclePlate(vehicle.getPlate(), pageable);
         model.addAttribute("vehicle", vehicle);
-        model.addAttribute("refuels", refuels);
+        model.addAttribute("refuels", refuels.getContent());
+        model.addAttribute("page", refuels);
         return "vehicle/refuels";
     }
 

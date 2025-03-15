@@ -39,7 +39,7 @@
                 <td th:text="${vehicle.brandName}"></td>
                 <td th:text="${vehicle.model}"></td>
                 <td th:text="${vehicle.odometer}"></td>
-                <td><a th:href="${'/vehicle/refuel/' + vehicle.id}" th:text="#{list.vehicle.refuels}">refuels</a></td>
+                <td><a th:href="${'/vehicle/refuels/' + vehicle.id}" th:text="#{list.vehicle.refuels}">refuels</a></td>
                 <td><a th:href="${'/vehicle/paths/' + vehicle.id}" th:text="#{list.vehicle.paths}">paths</a></td>
             </tr>
             </tbody>
