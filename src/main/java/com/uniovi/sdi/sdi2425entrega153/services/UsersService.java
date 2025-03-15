@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.services;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.passay.*;
 import org.springframework.data.domain.Page;
@@ -28,8 +29,15 @@ public class UsersService {
     }
 
     public Page<User> getUsers(Pageable pageable) {
-        Page<User> users = usersRepository.findAll(pageable);
-        return users;
+        return usersRepository.findAll(pageable);
+    }
+
+    public List<User> getUsers() {
+        return (List<User>) usersRepository.findAll();
+    }
+
+    public List<User> getStandardUsers() {
+        return ((List<User>) usersRepository.findAll()).stream().filter(u -> u.getRole().equals("ROLE_STANDARD")).collect(Collectors.toList());
     }
 
     public User getUser(Long id) {

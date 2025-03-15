@@ -11,7 +11,7 @@
                 <label class="control-label col-sm-2" for="dni">DNI:</label>
                 <div class="col-sm-10">
                     <input th:value="${user.dni}" id="dni" type="text" class="form-control" name="dni"
-                           placeholder="00000000A" required/>
+                           placeholder="00000000A"/>
                     <span class="text-danger" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></span>
                 </div>
             </div>
@@ -19,7 +19,7 @@
                 <label class="control-label col-sm-2" for="name">Nombre:</label>
                 <div class="col-sm-10">
                     <input th:value="${user.name}" id="name" type="text" class="form-control" name="name"
-                           placeholder="Pepe" required/>
+                           placeholder="Pepe"/>
                     <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
                 </div>
             </div>
@@ -27,8 +27,7 @@
                 <label class="control-label col-sm-2" for="lastName">Apellido:</label>
                 <div class="col-sm-10">
                     <input th:value="${user.lastName}" id="lastName" type="text" class="form-control" name="lastName"
-                           placeholder="Pérez"
-                           required="true"/>
+                           placeholder="Pérez"/>
                     <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                 </div>
             </div>
