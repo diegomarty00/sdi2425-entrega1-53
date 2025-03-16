@@ -47,7 +47,7 @@ public class InsertSampleDataService {
 
         Vehicle v0 = new Vehicle("1111", "CHASIS", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
         vehicleService.addVehicle(v0);
-        Vehicle v1 = new Vehicle("1234BCD", "CHASIS12345678901234", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
+        Vehicle v1 = new Vehicle("1234BCD", "12345678901234111", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
         v1.setFree(false);
         vehicleService.addVehicle(v1);
         Vehicle v2 = new Vehicle("O1234AB", "CHASIS23456789012345", "Toyota", "Corolla", Vehicle.FUEL_TYPES.GASOLINA, 12345);
@@ -79,8 +79,7 @@ public class InsertSampleDataService {
         Vehicle v14 = new Vehicle("2345XZZ", "CHASIS45678901231110", "Ford", "Focus", Vehicle.FUEL_TYPES.ELECTRICO, 23456);
         vehicleService.addVehicle(v14);
 
-        Vehicle v15 = new Vehicle("1234BCD", "12345678901234111", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
-        vehicleService.addVehicle(v15);
+
 
         // Trayectos
         Path path1 = new Path(new Date(), 1.2, 4578, 4600, "1111", 15.0, user1);
