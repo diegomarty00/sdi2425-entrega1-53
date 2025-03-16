@@ -61,5 +61,16 @@ public class LogEntry {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString() {
+        return "LogEntry{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", action='" + action + '\'' +
+                ", endpoint='" + endpoint + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
+
 }
 

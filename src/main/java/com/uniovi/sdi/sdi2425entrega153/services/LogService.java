@@ -5,6 +5,8 @@ import com.uniovi.sdi.sdi2425entrega153.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LogService {
 
@@ -16,5 +18,7 @@ public class LogService {
         logRepository.save(log);
     }
 
-
+    public List<LogEntry> getAllLogs() {
+        return logRepository.findAll();
+    }
 }
