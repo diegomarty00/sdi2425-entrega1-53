@@ -78,6 +78,14 @@ public class UsersController {
         return "user/listLogs";
     }
 
+    @RequestMapping(value = "/user/logs/delete", method = RequestMethod.POST)
+    public String deleteLogs() {
+        logService.deleteLogs();
+        return "redirect:/user/logs";
+    }
+
+
+
 
 
     @RequestMapping(value = "/user/edit/{id}")
