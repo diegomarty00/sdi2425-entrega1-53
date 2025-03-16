@@ -4,22 +4,32 @@ import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_HomeView;
 import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_LoginView;
 import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_PrivateView;
 import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_Properties;
+import com.uniovi.sdi.sdi2425entrega153.services.PathService;
 import com.uniovi.sdi.sdi2425entrega153.services.UsersService;
+import org.hibernate.sql.Select;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2425Entrega153ApplicationTests {
 
-	static String PathFirefox = "C:\\Users\\Usuario\\AppData\\Local\\Mozilla Firefox\\firefox.exe";
-	static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\uni\\SDI\\PL-SDI-Sesión6-material\\geckodriver-v0.30.0-win64.exe";
+	static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+	static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\SDI\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
 	static WebDriver driver = getDriver(PathFirefox, Geckodriver);
 	static String URL = "http://localhost:8100";
-
+	@Autowired
+	private PathService pathService;
 	@Autowired
 	private UsersService usersService;
 
@@ -114,6 +124,298 @@ class Sdi2425Entrega153ApplicationTests {
 		String error2 = PO_HomeView.getP().getString("Error.empty", PO_Properties.getSPANISH());
 		PO_PrivateView.editUserError(driver, "99887766A", "12345678Z", "", "", error1, error2);
 		PO_LoginView.logout(driver);
+	}
+	@Test
+	@Order(25)
+	void testInicioTrayectoValido() throws Exception {
+		// Login
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// Ir al formulario de inicio de trayecto
+		driver.get(URL + "/path/start");
+		Thread.sleep(1000);
+
+		// Verifica que la opción "1234BCZ" NO aparece en el desplegable
+		List<WebElement> options = driver.findElements(By.xpath("//select[@name='vehicleRegistration']/option"));
+		boolean found = false;
+		for (WebElement option : options) {
+			if (option.getText().trim().equals("1234BCZ")) {
+				found = true;
+				break;
+			}
+		}
+		Assertions.assertTrue(found, "El vehículo '1234BCZ' se añadio correctamente.");
+	}
+
+	@Test
+	@Order(26)
+	void testInicioTrayectoNoValidoConTrayectoActivo() throws Exception {
+		// Preparar: Crear un trayecto activo para el vehículo "1234BCM" para el usuario "99999990A"
+		pathService.createActivePathForVehicle("1234BCM", "99999990A");
+
+		// Login con un usuario que ya tiene trayecto activo
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// Ir al formulario de inicio de trayecto
+		driver.get(URL + "/path/start");
+		Thread.sleep(1000);
+
+		// Verificar que la opción "1234BCM" no aparezca en el desplegable
+		List<WebElement> options = driver.findElements(By.xpath("//select[@name='vehicleRegistration']/option"));
+		boolean found = false;
+		for (WebElement option : options) {
+			System.out.println("Opción encontrada: " + option.getText().trim());
+			if (option.getText().trim().equals("1234BCM")) {
+				found = true;
+				break;
+			}
+		}
+		// Aserción: La opción "1234BCM" no debe estar en el desplegable
+		Assertions.assertFalse(found, "La opción '1234BCM' no debería estar en el desplegable, ya que el vehículo está en uso.");
+
+		// Cierra sesión (opcional, si existe el botón o enlace para logout)
+		// driver.findElement(By.id("logoutButton")).click();
+	}
+
+	@Test
+	@Order(27)
+	void testInicioTrayectoNoValidoVehiculoEnUso() throws Exception {
+		// Configuración: Crear un trayecto activo para el vehículo "1234BCZ"
+		// (Simula que el vehículo está en uso, con un DNI diferente al del usuario que se va a loguear)
+		pathService.createActivePathForVehicle("1234BCZ", "99999990A");
+
+		// Login con un usuario de prueba (que no tiene trayecto activo)
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// Navega a la página de inicio de trayecto
+		driver.get(URL + "/path/start");
+		Thread.sleep(1000); // Espera a que se cargue el formulario
+
+		// Obtener todas las opciones del select con name "vehicleRegistration"
+		List<WebElement> options = driver.findElements(By.xpath("//select[@name='vehicleRegistration']/option"));
+		boolean found = false;
+		for (WebElement option : options) {
+			System.out.println("Opción encontrada: " + option.getText().trim());
+			if (option.getText().trim().equals("1234BCZ")) {
+				found = true;
+				break;
+			}
+		}
+		// Verifica que la opción "1234BCZ" NO aparezca, ya que el vehículo está en uso.
+		Assertions.assertFalse(found, "La opción '1234BCZ' no debería estar en el desplegable, ya que el vehículo está en uso.");
+
+
+
+
+
+	}
+	@Test
+	@Order(28)
+	void testRepostajeValido() throws InterruptedException {
+		// Preparar estado: Crear un trayecto activo para el usuario 10000001S y el vehículo "1111"
+		// (Asegúrate de que "1111" existe en tu base de datos y que createActivePathForVehicle lo marque como activo)
+		pathService.createActivePathForVehicle("1111", "99999990A");
+
+		// 1. Iniciar sesión
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// 2. Navegar al formulario de repostaje
+		driver.get(URL + "/refuel/new");
+		Thread.sleep(1000);
+
+		// 3. Llenar campos del formulario con datos válidos
+		driver.findElement(By.id("stationName")).sendKeys("Estación X");
+		driver.findElement(By.id("fuelPrice")).sendKeys("1.50");
+		driver.findElement(By.id("fuelQuantity")).sendKeys("10");
+		driver.findElement(By.id("odometer")).sendKeys("200"); // Debe ser > odómetro inicial del trayecto
+
+		// 4. Enviar el formulario
+		driver.findElement(By.id("submitRefuelButton")).click();
+
+		// 5. Verificar que se ha registrado correctamente (p.ej., sin errorMessage)
+		//    Dependiendo de tu implementación, podrías verificar la redirección o la ausencia de error:
+		List<WebElement> errorElements = driver.findElements(By.id("errorMessage"));
+		assertTrue(errorElements.isEmpty(), "No debería mostrarse un mensaje de error en repostaje válido.");
+
+		// Opcional: Cerrar sesión
+		// driver.findElement(By.xpath("//a[contains(text(),'Logout')]")).click();
+	}
+	@Test
+	@Order(29)
+	void testRepostajeNoHayTrayectoEnCurso() throws InterruptedException {
+		// Asegurarnos de que NO hay trayecto activo para el usuario 99999990A
+		// Podrías finalizar trayectos previos o no crear ninguno.
+
+		// 1. Iniciar sesión
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// 2. Navegar al formulario de repostaje
+		driver.get(URL + "/refuel/new");
+		Thread.sleep(1000);
+
+		// 3. Se espera un error directo, por ejemplo, "No tienes un trayecto en curso..."
+		//    Dependiendo de tu implementación, quizás ni aparezca el formulario o aparezca un mensaje:
+		String errorText = driver.findElement(By.id("errorMessage")).getText();
+		assertTrue(errorText.contains("No tienes un trayecto en curso"),
+				"Debe mostrarse error indicando que no hay trayecto en curso.");
+
+		// Opcional: Cerrar sesión
+		// driver.findElement(By.xpath("//a[contains(text(),'Logout')]")).click();
+	}
+
+	@Test
+	@Order(30)
+	void testRepostajeCamposVacios() throws InterruptedException {
+		// Preparar estado: Crear un trayecto activo para 10000001S y vehículo "1111"
+		pathService.createActivePathForVehicle("1111", "99999990A");
+
+		// 1. Iniciar sesión
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// 2. Navegar al formulario de repostaje
+		driver.get(URL + "/refuel/new");
+		Thread.sleep(1000);
+
+		// 3. Enviar el formulario sin llenar campos
+		//    (nombre de la estación vacío, precio vacío, cantidad vacía, odómetro vacío)
+		driver.findElement(By.id("submitRefuelButton")).click();
+
+		// 4. Verificar que aparecen mensajes de error (o uno genérico) en "errorMessage"
+		String errorText = driver.findElement(By.id("errorMessage")).getText();
+		assertTrue(errorText.contains("El nombre de la estación es obligatorio.")
+						&& errorText.contains("El precio debe ser un número positivo.")
+						&& errorText.contains("La cantidad debe ser un número positivo.")
+						&& errorText.contains("El odómetro debe ser mayor que el valor inicial del trayecto (0.0)."),
+				"Deben mostrarse mensajes de error por campos vacíos.");
+
+		// Opcional: Cerrar sesión
+		// driver.findElement(By.xpath("//a[contains(text(),'Logout')]")).click();
+	}
+	/**
+	 * [Prueba33] Registro de fin de trayecto válido.
+	 * Se asume que el usuario "userActive" tiene un trayecto activo.
+	 * Se rellena el odómetro con un valor mayor al inicio del trayecto.
+	 */
+	@Test
+	@Order(33)
+	void testFinTrayectoValido() throws InterruptedException {
+		pathService.createActivePathForVehicle("1111", "99999990A");
+		// 1. Login con un usuario que tenga un trayecto activo
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		// 2. Ir a la vista de fin de trayecto
+		driver.get(URL + "/path/end");
+		Thread.sleep(1000);
+
+		// 3. Rellenar el campo de odómetro final con un valor válido
+		// Ajusta "finalOdometer" al id real del input de tu formulario
+		driver.findElement(By.id("finalOdometer")).clear();
+		driver.findElement(By.id("finalOdometer")).sendKeys("20000");
+
+		// 4. Hacer click en el botón para finalizar
+		// Ajusta "submitEndButton" al id real de tu botón
+		driver.findElement(By.xpath("//button[text()='Finalizar Trayecto']")).click();
+
+		// 5. Verificar que se ha redirigido o que aparece un mensaje de éxito
+		// Por ejemplo, que la URL contiene "/path/personal"
+		Assertions.assertTrue(driver.getCurrentUrl().contains("/path/end"));
+	}
+
+	/**
+	 * [Prueba34] Registro de fin de trayecto inválido (odómetro vacío).
+	 * Se asume que "userActive" tiene un trayecto activo,
+	 * pero no se rellena el campo odómetro.
+	 */
+	@Test
+	@Order(34)
+	void testFinTrayectoOdometroVacio() throws InterruptedException {
+		pathService.createActivePathForVehicle("1111", "99999990A");
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		driver.get(URL + "/path/end");
+		Thread.sleep(1000);
+
+		// Dejar el campo de odómetro vacío
+		driver.findElement(By.id("finalConsumption")).clear();
+
+		driver.findElement(By.xpath("//button[text()='Finalizar Trayecto']")).click();
+
+
+		// Verificar que sigue en la misma página y/o aparece un mensaje de error
+		// Suponiendo que se muestra un elemento con id "errorMessage"
+		String errorText = driver.findElement(By.id("errorMessage")).getText();
+		Assertions.assertTrue(errorText.contains("El campo no puede ser vacio"));
+	}
+
+	/**
+	 * [Prueba35] Registro de fin de trayecto inválido (odómetro negativo).
+	 * Se asume que "userActive" tiene un trayecto activo,
+	 * pero se rellena el campo con un valor negativo.
+	 */
+	@Test
+	@Order(35)
+	void testFinTrayectoOdometroNegativo() throws InterruptedException {
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		driver.get(URL + "/path/end");
+		Thread.sleep(1000);
+
+		driver.findElement(By.id("finalOdometer")).clear();
+		driver.findElement(By.id("finalOdometer")).sendKeys("-100");
+
+		driver.findElement(By.xpath("//button[text()='Finalizar Trayecto']")).click();
+
+
+		// Verificar el error
+		String errorText = driver.findElement(By.id("errorMessage")).getText();
+		Assertions.assertTrue(errorText.contains("El odómetro final debe ser mayor que el inicial"));
+	}
+
+	/**
+	 * [Prueba36] Registro de fin de trayecto inválido (no hay trayectos en curso).
+	 * Se asume que el usuario "userNoActive" no tiene un trayecto activo.
+	 */
+	@Test
+	@Order(36)
+	void testFinTrayectoSinTrayectoActivo() throws InterruptedException {
+		driver.get(URL + "/login");
+		driver.findElement(By.id("username")).sendKeys("99999990A");
+		driver.findElement(By.id("password")).sendKeys("123456");
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+
+		driver.get(URL + "/path/end");
+		Thread.sleep(1000);
+
+		// Debería redirigir o mostrar un error indicando que no hay trayecto
+		String errorText = driver.findElement(By.id("errorMessage")).getText();
+		Assertions.assertTrue(errorText.contains("No tienes un trayecto en curso"));
 	}
 
 	@Test

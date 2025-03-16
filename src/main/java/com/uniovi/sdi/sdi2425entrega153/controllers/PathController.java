@@ -6,6 +6,7 @@ import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import com.uniovi.sdi.sdi2425entrega153.services.PathService;
 import com.uniovi.sdi.sdi2425entrega153.services.UsersService;
 import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
+import com.uniovi.sdi.sdi2425entrega153.validators.EndTripValidator;
 import com.uniovi.sdi.sdi2425entrega153.validators.StartTripValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,8 @@ public class PathController {
     private final UsersService usersService;
     private final HttpSession httpSession;
     private final VehicleService vehicleService;
-
+    @Autowired
+    private EndTripValidator endTripValidator;
     @Autowired
     private StartTripValidator startTripValidator;
 
@@ -66,6 +68,24 @@ public class PathController {
         pathService.startPath(path);
         return "redirect:/home";
     }
+    @PostMapping("/end")
+    public String endPath(
+            @ModelAttribute("activePath") Path path,
+            BindingResult result,
+            Principal principal,
+            Model model
+    ) {
+        endTripValidator.validate(path, result);
+        if (result.hasErrors()) {
+            model.addAttribute("activePath", pathService.getActivePathForUser(principal.getName()));
+            return "path/end";
+        }
+        pathService.endPath(path);
+        return "redirect:/path/personal";
+    }
+
+
+
 
     /**
      * GET /path/list
@@ -82,7 +102,7 @@ public class PathController {
         return "path/list";
     }
 
-    @RequestMapping("/end")
+    @GetMapping("/end")
     public String showEndForm(Model model, Principal principal) {
         Path activePath = pathService.getActivePathForUser(principal.getName());
         if (activePath == null) {
