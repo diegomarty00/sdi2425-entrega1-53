@@ -7,14 +7,14 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Vehículos</h2>
+    <h2 th:text="#{vehicles}"></h2>
 
-    <p>Los vehículos que actualmente figuran en el sistema son los siguientes:</p>
+    <p th:text="#{vehicles.info}">:</p>
 
     <div class="table-responsive">
 
         <!-- Botón para actualizar la lista -->
-        <button type="button" id="updateButton" class="btn btn-primary">Actualizar</button>
+        <button type="button" id="updateButton" class="btn btn-primary" th:text="#{update}"></button>
 
         <script>
             $("#updateButton").click(function() {
@@ -35,12 +35,12 @@
                     <th scope="col">
                         <input type="checkbox" id="selectAll">
                     </th>
-                    <th scope="col">Matrícula</th>
-                    <th scope="col">Número de bastidor</th>
-                    <th scope="col">Marca</th>
-                    <th scope="col">Modelo</th>
-                    <th scope="col">Combustible</th>
-                    <th scope="col">Kilometraje</th>
+                    <th scope="col" th:text="#{vehicle.registration}"></th>
+                    <th scope="col" th:text="#{vehicle.chassisNumber}"></th>
+                    <th scope="col" th:text="#{vehicle.brand}"></th>
+                    <th scope="col" th:text="#{vehicle.model}"></th>
+                    <th scope="col" th:text="#{vehicle.fuel}"></th>
+                    <th scope="col" th:text="#{vehicle.kilometraje}"></th>
 
                 </tr>
                 </thead>
@@ -68,15 +68,19 @@
 </div>
 <footer th:replace="fragments/footer"/>
 
-<script>
+<script th:inline="javascript">
+    // Variables con los mensajes internacionalizados
+    let validationMessage = [[#{delete.validation.message}]];
+    let confirmationMessage = [[#{delete.confirmation.message}]];
+
     // Función para validar que al menos un checkbox esté seleccionado antes de enviar
     function validateDeleteForm() {
         let checkboxes = document.querySelectorAll("input[name='selectedVehicles']:checked");
         if (checkboxes.length === 0) {
-            alert("Debes seleccionar al menos un vehículo para eliminar.");
+            alert(validationMessage); // Usa el mensaje internacionalizado
             return false; // Evita el envío del formulario
         }
-        return confirm("¿Estás seguro de eliminar los vehículos seleccionados?");
+        return confirm(confirmationMessage); // Usa el mensaje internacionalizado
     }
 
     // Funcionalidad de "Seleccionar todos"
@@ -85,6 +89,7 @@
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);
     });
 </script>
+
 
 </body>
 </html>

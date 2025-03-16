@@ -6,13 +6,13 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Vehículos</h2>
+    <h2 th:text="#{vehicles}"></h2>
 
-    <p>Los vehículos que actualmente figuran en el sistema como disponibles son los siguientes:</p>
+    <p th:text="#{vehicles.info}">:</p>
 
     <div class="table-responsive">
 
-        <button type="button" id="updateButton" class="btn btn-primary">Actualizar</button>
+        <button type="button" id="updateButton" class="btn btn-primary" th:text="#{update}"></button>
 
         <script>
             $( "#updateButton" ).click(function() {
@@ -24,10 +24,10 @@
 
             <thead>
             <tr>
-                <th scope="col">Matrícula</th>
-                <th scope="col">Marca</th>
-                <th scope="col">Modelo</th>
-                <th scope="col">Odómetro</th>
+                <th scope="col" th:text="#{vehicle.registration}"></th>
+                <th scope="col" th:text="#{vehicle.brand}"></th>
+                <th scope="col" th:text="#{vehicle.model}"></th>
+                <th scope="col" th:text="#{vehicle.odometer}"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -39,8 +39,8 @@
                 <td th:text="${vehicle.brandName}"></td>
                 <td th:text="${vehicle.model}"></td>
                 <td th:text="${vehicle.odometer}"></td>
-                <td><a th:href="${'/vehicle/refuels/' + vehicle.id}" th:text="#{list.vehicle.refuels}">refuels</a></td>
-                <td><a th:href="${'/vehicle/paths/' + vehicle.id}" th:text="#{list.vehicle.paths}">paths</a></td>
+                <td><a th:href="${'/vehicle/refuels/' + vehicle.id}" th:text="#{refuels}">refuels</a></td>
+                <td><a th:href="${'/vehicle/paths/' + vehicle.id}" th:text="#{paths}">paths</a></td>
             </tr>
             </tbody>
 
