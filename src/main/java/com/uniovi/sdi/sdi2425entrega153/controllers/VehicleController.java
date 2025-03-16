@@ -100,7 +100,8 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.getVehicle(id);
         Page<Path> paths = pathService.findByVehiclePlate(vehicle.getPlate(), pageable);
         model.addAttribute("vehicle", vehicle);
-        model.addAttribute("paths", paths);
+        model.addAttribute("paths", paths.getContent());
+        model.addAttribute("page", paths);
         return "vehicle/paths";
     }
 
