@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -65,6 +66,19 @@ public class UsersController {
 
         return "user/list";
     }
+
+    @RequestMapping("/user/logs")
+    public String logs(Model model, Pageable pageable) {
+        List<LogEntry> logs = logService.getAllLogs();
+        Collections.reverse(logs);
+        model.addAttribute("logsList", logs);
+
+        logService.saveLog(getCurrentUsername(), "PET", "/user/logs");
+
+        return "user/listLogs";
+    }
+
+
 
     @RequestMapping(value = "/user/edit/{id}")
     public String edit(Model model, @PathVariable Long id) {
@@ -153,6 +167,7 @@ public class UsersController {
         model.addAttribute("user", user);
         return "user/register";
     }
+
 
     @RequestMapping("/user/list/update")
     public String updateList(Model model, Pageable pageable) {

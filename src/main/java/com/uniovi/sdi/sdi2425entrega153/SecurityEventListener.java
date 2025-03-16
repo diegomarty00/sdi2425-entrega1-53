@@ -27,8 +27,14 @@ public class SecurityEventListener implements ApplicationListener<ApplicationEve
                 logService.saveLog(username, "LOGIN-EX", "Inicio de sesión exitoso");
             }
         } else if (event instanceof AuthenticationFailureBadCredentialsEvent failureEvent) {
+            /*
             String username = (String) failureEvent.getAuthentication().getPrincipal();
             logService.saveLog(username, "LOGIN-ERR", "Intento de inicio de sesión fallido");
+
+             */
+            Authentication authentication = failureEvent.getAuthentication();
+            String username = (String) authentication.getPrincipal();
+            logService.saveLog(username, "LOGIN-ERR", "Intento de inicio de sesión fallido: " + username);
         }
     }
 }
