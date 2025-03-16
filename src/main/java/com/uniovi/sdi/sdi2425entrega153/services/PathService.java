@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
@@ -147,10 +148,19 @@ public class PathService {
         return paths;
     }
 
+    public List<Path> getPathsByUserDni(String dni) {
+        return pathRepository.getPathsByUserDni(dni);
+    }
 
 
     public Page<Path> findByVehiclePlate(String plate, Pageable pageable) {
         Page<Path> paths = pathRepository.findAllByVehiclePlate(pageable, plate);
         return paths;
     }
+
+    public List<Path> getPathsByVehicle(String plate) {
+        List<Path> result = pathRepository.getPathsByVehicle(plate);
+        return result;
+    }
+
 }

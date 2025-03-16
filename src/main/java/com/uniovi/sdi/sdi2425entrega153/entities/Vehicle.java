@@ -109,4 +109,11 @@ public class Vehicle {
         this.odometer = odometer;
     }
 
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
+    }
 }

@@ -26,6 +26,12 @@ public interface PathRepository extends CrudRepository<Path, Long> {
     @Query("SELECT r FROM Path r  WHERE r.user = ?1 ORDER BY r.startDate ASC")
     Page<Path> findAllByUser(Pageable pageable, User user);
 
+    @Query("SELECT r FROM Path r  WHERE r.user.dni = ?1 ORDER BY r.startDate ASC")
+    List<Path> getPathsByUserDni(String dni);
+
+    @Query("SELECT r FROM Path r WHERE r.vehicleRegistration = ?1  ORDER BY r.startDate ASC")
+    List<Path> getPathsByVehicle(String plate);
+
     Page<Path> findAll(Pageable pageable);
     // Busca el último trayecto finalizado (finalConsumption > 0) para un vehículo, ordenado por startDate descendente.
     Optional<Path> findTopByVehicleRegistrationAndFinalConsumptionGreaterThanOrderByStartDateDesc(String vehicleRegistration, double finalConsumption);
@@ -36,4 +42,7 @@ public interface PathRepository extends CrudRepository<Path, Long> {
     @Transactional
     @Query("UPDATE Path SET resend = ?1 WHERE id = ?2")
     void updateResend(Boolean resend, Long id);
+
+
+
 }

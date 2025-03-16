@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 // RefuelRepository.java
 public interface RefuelRepository extends CrudRepository<Refuel, Long> {
 
@@ -14,4 +16,7 @@ public interface RefuelRepository extends CrudRepository<Refuel, Long> {
     Page<Refuel> findAllByVehiclePlate(Pageable pageable, String plate);
 
     Page<Refuel> findAll(Pageable pageable);
+
+    @Query("SELECT r FROM Refuel r WHERE r.vehicle.plate = ?1 ORDER BY r.id ASC")
+    List<Refuel> getRefulsByVehicle(String plate);
 }

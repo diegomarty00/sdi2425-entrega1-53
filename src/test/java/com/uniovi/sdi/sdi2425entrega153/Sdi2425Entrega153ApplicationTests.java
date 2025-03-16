@@ -1,11 +1,12 @@
 package com.uniovi.sdi.sdi2425entrega153;
 
-import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_HomeView;
-import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_LoginView;
-import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_PrivateView;
-import com.uniovi.sdi.sdi2425entrega153.pageobjects.PO_Properties;
+import com.uniovi.sdi.sdi2425entrega153.entities.*;
+import com.uniovi.sdi.sdi2425entrega153.pageobjects.*;
+import com.uniovi.sdi.sdi2425entrega153.repositories.PathRepository;
 import com.uniovi.sdi.sdi2425entrega153.services.PathService;
+import com.uniovi.sdi.sdi2425entrega153.services.RefuelService;
 import com.uniovi.sdi.sdi2425entrega153.services.UsersService;
+import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import org.hibernate.sql.Select;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -16,22 +17,28 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2425Entrega153ApplicationTests {
 
 	static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-	static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\SDI\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+	//static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\SDI\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+	static String Geckodriver = "C:\\Users\\Diego Marty\\Desktop\\Documentos\\Universidad\\SDI\\PL-SDI-Sesión6-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
 	static WebDriver driver = getDriver(PathFirefox, Geckodriver);
 	static String URL = "http://localhost:8100";
 	@Autowired
 	private PathService pathService;
 	@Autowired
 	private UsersService usersService;
+    @Autowired
+    private RefuelService refuelService;
+    @Autowired
+    private VehicleService vehicleService;
 
 	public static WebDriver getDriver(String PathFirefox, String Geckodriver) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -125,6 +132,38 @@ class Sdi2425Entrega153ApplicationTests {
 		PO_PrivateView.editUserError(driver, "99887766A", "12345678Z", "", "", error1, error2);
 		PO_LoginView.logout(driver);
 	}
+
+	@Test
+	@Order(24)
+	void Prueba24() {
+		String userDNI = "99999990A";
+		PO_LoginView.login(driver, userDNI, "123456");
+		//Entramos en el elemento de trayectos ([1]) y luego en el ver trayectos ([2])
+		driver.get(URL + "/path/list");
+
+		// Obtener datos esperados de la base de datos
+		List<Path> expectedPaths = pathService.getPathsByUserDni(userDNI); // Ajusta según tu lógica de negocio
+
+		// Obtener los elementos de la lista desde la página web
+		List<WebElement> pathListRows = driver.findElements(By.xpath("//table[@id='pathsTable']/tbody/tr"));
+
+		// Verificar que el tamaño de la lista coincide
+		assertEquals(expectedPaths.size(), pathListRows.size(), "El número de trayectos no coincide");
+
+		String[] parts;
+		// Verificar contenido de cada trayecto
+		for (int i = 0; i < expectedPaths.size(); i++) {
+			parts = pathListRows.get(i).getText().split("\\s+");
+			assertEquals(parts[0], expectedPaths.get(i).getOnlyDate(), "No coincide la fecha: " + i);
+			assertEquals(parts[1], expectedPaths.get(i).getOnlyTime(), "No coincide la hora: " + i);
+			assertEquals(parts[2], expectedPaths.get(i).getVehicleRegistration(), "No coincide la matricula: " + i);
+			String expectedVehicle = expectedPaths.get(i).getUserDni();
+			assertEquals(userDNI, expectedVehicle, "El empleado no coincide en la el conductor: " + i);
+		}
+
+		PO_LoginView.logout(driver);
+	}
+
 	@Test
 	@Order(25)
 	void testInicioTrayectoValido() throws Exception {
@@ -177,7 +216,7 @@ class Sdi2425Entrega153ApplicationTests {
 			}
 		}
 		// Aserción: La opción "1234BCM" no debe estar en el desplegable
-		Assertions.assertFalse(found, "La opción '1234BCM' no debería estar en el desplegable, ya que el vehículo está en uso.");
+		assertFalse(found, "La opción '1234BCM' no debería estar en el desplegable, ya que el vehículo está en uso.");
 
 		// Cierra sesión (opcional, si existe el botón o enlace para logout)
 		// driver.findElement(By.id("logoutButton")).click();
@@ -211,7 +250,7 @@ class Sdi2425Entrega153ApplicationTests {
 			}
 		}
 		// Verifica que la opción "1234BCZ" NO aparezca, ya que el vehículo está en uso.
-		Assertions.assertFalse(found, "La opción '1234BCZ' no debería estar en el desplegable, ya que el vehículo está en uso.");
+		assertFalse(found, "La opción '1234BCZ' no debería estar en el desplegable, ya que el vehículo está en uso.");
 
 
 
@@ -416,6 +455,108 @@ class Sdi2425Entrega153ApplicationTests {
 		// Debería redirigir o mostrar un error indicando que no hay trayecto
 		String errorText = driver.findElement(By.id("errorMessage")).getText();
 		Assertions.assertTrue(errorText.contains("No tienes un trayecto en curso"));
+	}
+
+	@Test
+	@Order(37)
+	void Prueba37() {
+		String userDNI = "99999990A";
+		PO_LoginView.login(driver, userDNI, "123456");
+		//Entramos en el elemento de trayectos ([1]) y luego en el ver trayectos ([2])
+		driver.get(URL + "/vehicle/free");
+
+		// Obtener los elementos de la lista desde la página web
+		List<WebElement> vehicleListRows = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
+
+		String[] vehiculo;
+		// Verificar contenido de cada trayecto
+		for (int i = 0; i < vehicleListRows.size(); i++) {
+			vehiculo = vehicleListRows.get(i).getText().split("\\s+");
+			List<Path> expectedPaths = pathService.getPathsByVehicle(vehiculo[0]); // Ajusta según tu lógica de negocio
+			if (!expectedPaths.isEmpty()) {
+				driver.get(URL + "/vehicle/paths/"+expectedPaths.get(0).getId());
+
+				List<WebElement> pathListRows = driver.findElements(By.xpath("//table[@id='pathsTable']/tbody/tr"));
+
+				String[] parts;
+				for (int j = 0; j < pathListRows.size(); j++) {
+					parts = pathListRows.get(j).getText().split("\\s+");
+					assertEquals(parts[0], expectedPaths.get(j).getOnlyDate(), "No coincide la fecha: " + j);
+					assertEquals(parts[1], expectedPaths.get(j).getOnlyTime(), "No coincide la hora: " + j);
+					assertEquals(vehiculo[0], expectedPaths.get(j).getVehicleRegistration(), "No coincide la matricula: " + i);
+				}
+			}
+		}
+		PO_LoginView.logout(driver);
+	}
+
+	@Test
+	@Order(38)
+	void Prueba38() {
+		String userDNI = "99999990A";
+		PO_LoginView.login(driver, userDNI, "123456");
+		//Entramos en el elemento de trayectos ([1]) y luego en el ver trayectos ([2])
+		driver.get(URL + "/vehicle/free");
+
+		// Obtener los elementos de la lista desde la página web
+		List<WebElement> vehicleListRows = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
+
+		String[] vehiculo;
+		// Verificar contenido de cada trayecto
+		for (int i = 0; i < vehicleListRows.size(); i++) {
+			vehiculo = vehicleListRows.get(i).getText().split("\\s+");
+			List<Refuel> expectedRefuels = refuelService.getRefulsByVehicle(vehiculo[0]); // Ajusta según tu lógica de negocio
+			if (!expectedRefuels.isEmpty()) {
+				driver.get(URL + "/vehicle/paths/"+expectedRefuels.get(0).getId());
+
+				List<WebElement> refuelListRows = driver.findElements(By.xpath("//table[@id='refuelsTable']/tbody/tr"));
+
+				String[] refuels;
+				for (int j = 0; j < refuelListRows.size(); j++) {
+					refuels = refuelListRows.get(j).getText().split("\\s+");
+					assertEquals(refuels[0], expectedRefuels.get(j).getOnlyDate(), "No coincide la fecha: " + j);
+					assertEquals(refuels[1], expectedRefuels.get(j).getOnlyTime(), "No coincide la hora: " + j);
+					assertEquals(vehiculo[0], expectedRefuels.get(j).getVehicleRegistration(), "No coincide la matricula: " + i);
+				}
+			}
+		}
+		PO_LoginView.logout(driver);
+	}
+
+	@Test
+	@Order(39)
+	void Prueba39() {
+		String userDNI = "99999990A";
+		PO_LoginView.login(driver, userDNI, "123456");
+		//Entramos en el elemento de trayectos ([1]) y luego en el ver trayectos ([2])
+		driver.get(URL + "/vehicle/free");
+
+		// Obtener los elementos de la lista desde la página web
+		List<WebElement> vehicleListRows = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
+
+		driver.get(URL + "/vehicle/free?page=1");
+		vehicleListRows.addAll(driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr")));
+
+		driver.get(URL + "/vehicle/free?page=2");
+		vehicleListRows.addAll(driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr")));
+
+		List<Vehicle> vehicles = vehicleService.findAll();
+		List<Vehicle> result = new ArrayList<Vehicle>();
+		assertTrue(vehicles.size() > vehicleListRows.size());
+
+		for (int i = 0; i < vehicles.size(); i++) {
+			boolean found = false;
+			String matricula = vehicleListRows.get(i).getText().split("\\s+")[0];
+			for (int j = 0; j < vehicleListRows.size(); j++) {
+				if (matricula.equals(vehicles.get(j).getPlate())) {
+					found = true;
+				}
+			}
+			if (!found) {
+				assertFalse(vehicleService.findByPlate(matricula).isFree());
+			}
+		}
+		PO_LoginView.logout(driver);
 	}
 
 	@Test

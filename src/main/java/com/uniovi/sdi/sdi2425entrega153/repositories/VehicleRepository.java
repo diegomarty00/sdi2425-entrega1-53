@@ -30,6 +30,8 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     Page<Vehicle> findAll(Pageable pageable);
 
 
+    List<Vehicle> findAll();
+
     @Modifying
     @Query("DELETE FROM Vehicle v WHERE v.plate IN :plates")
     void deleteByPlates(@Param("plates") List<String> plates);
