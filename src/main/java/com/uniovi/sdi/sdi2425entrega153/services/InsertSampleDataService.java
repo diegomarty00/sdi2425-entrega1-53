@@ -1,10 +1,12 @@
 package com.uniovi.sdi.sdi2425entrega153.services;
 
+import com.uniovi.sdi.sdi2425entrega153.entities.Path;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,11 +17,13 @@ public class InsertSampleDataService {
     private final RolesService rolesService;
 
     private final VehicleService vehicleService;
+    private final PathService pathService;
 
-    public InsertSampleDataService(UsersService usersService, RolesService rolesService, VehicleService vehicleService) {
+    public InsertSampleDataService(UsersService usersService, RolesService rolesService, VehicleService vehicleService, PathService pathService) {
         this.usersService = usersService;
         this.rolesService = rolesService;
         this.vehicleService = vehicleService;
+        this.pathService = pathService;
     }
 
     @PostConstruct
@@ -71,7 +75,26 @@ public class InsertSampleDataService {
         Vehicle v14 = new Vehicle("2345XZZ", "CHASIS45678901231110", "Ford", "Focus", Vehicle.FUEL_TYPES.ELECTRICO, 23456);
         vehicleService.addVehicle(v14);
 
+        // Trayectos
+        Path path1 = new Path(new Date(), 1.2, 4578, 4600, "1111", 15.0, user1);
+        path1.setUserDni(user1.getDni());
+        pathService.addPath(path1);
 
+        Path path2 = new Path(new Date(), 2.5, 12345, 12400, "1234BCD", 35.0, user2);
+        path2.setUserDni(user1.getDni());
+        pathService.addPath(path2);
+
+        Path path3 = new Path(new Date(), 0.8, 67890, 68000, "5678EFG", 10.0, user3);
+        path3.setUserDni(user3.getDni());
+        pathService.addPath(path3);
+
+        Path path4 = new Path(new Date(), 1.5, 23456, 23600, "2345XYZ", 20.0, user1);
+        path4.setUserDni(user1.getDni());
+        pathService.addPath(path4);
+
+        Path path5 = new Path(new Date(), 3.0, 78901, 79000, "A1234BCD", 50.0, user2);
+        path5.setUserDni(user3.getDni());
+        pathService.addPath(path5);
 
     }
 }

@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Trayectos</h2>
+    <h2>Trayectos - <span th:text="${vehicle.plate}"></span></h2>
 
-    <p>Losa trayectos personales que has realizado son los siguientes:</p>
+    <p>Los trayectos que se han realizado son los siguientes:</p>
 
     <div class="table-responsive">
 
@@ -18,21 +18,17 @@
             <tr>
                 <th scope="col">Fecha de inicio</th>
                 <th scope="col">Hora de inicio</th>
-                <th scope="col">Matrícula</th>
-                <th scope="col">Duración (horas)</th>
-                <th scope="col">Odómetro inicio</th>
-                <th scope="col">Odómetro final</th>
+                <th scope="col">Conductor</th>
+                <th scope="col">Kilometros</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="path : ${pathList}">
+            <tr th:each="path : ${paths}">
                 <td th:text="${path.getOnlyDate()}"></td>
                 <td th:text="${path.getOnlyTime()}"></td>
-                <td th:text="${path.vehicleRegistration}"></td>
-                <td th:text="${path.time}"></td>
-                <td th:text="${path.initialConsumption}"></td>
-                <td th:text="${path.finalConsumption}"></td>
+                <td th:text="${path.user.name}"></td>
+                <td th:text="${path.kilometers}"></td>
             </tr>
             </tbody>
 
