@@ -1,45 +1,50 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"/>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
 <body>
-<!-- Barra de Navegación superior -->
-<nav th:replace="fragments/nav"/>
+<!-- Barra de navegación -->
+<nav th:replace="fragments/nav :: nav"></nav>
 
-<body>
-<h1>Registrar Repostaje</h1>
-<form th:action="@{/refuel/new}" th:object="${refuel}" method="post">
-  <div>
-    <label>Estación de Servicio:</label>
-    <input type="text" th:field="*{stationName}" placeholder="Nombre de la estación" />
-  </div>
-  <div>
-    <label>Precio (€/unidad):</label>
-    <input type="number" step="0.01" th:field="*{fuelPrice}" placeholder="Precio por unidad" />
-  </div>
-  <div>
-    <label>Cantidad repostada:</label>
-    <input type="number" step="0.01" th:field="*{fuelQuantity}" placeholder="Cantidad" />
-  </div>
-  <div>
-    <label>¿Depósito lleno?</label>
-    <input type="checkbox" th:field="*{fullTank}" />
-  </div>
-  <div>
-    <label>Odómetro:</label>
-    <input type="number" step="0.1" th:field="*{odometer}" placeholder="Valor del odómetro" />
-  </div>
-  <div>
-    <label>Observaciones (opcional):</label>
-    <textarea th:field="*{observations}"></textarea>
-  </div>
-  <button type="submit">Registrar Repostaje</button>
-</form>
+<div class="container">
+  <h1>Registrar Repostaje</h1>
+  <form th:action="@{/refuel/new}" th:object="${refuel}" method="post">
+    <div>
+      <label for="stationName">Estación de Servicio:</label>
+      <input type="text" id="stationName" th:field="*{stationName}" placeholder="Nombre de la estación" />
+    </div>
+    <div>
+      <label>Precio (€/unidad):</label>
+      <input type="number" step="0.01" th:field="*{fuelPrice}" placeholder="Precio por unidad" />
+    </div>
+    <div>
+      <label>Cantidad repostada:</label>
+      <input type="number" step="0.01" th:field="*{fuelQuantity}" placeholder="Cantidad" />
+    </div>
+    <div>
+      <label>¿Depósito lleno?</label>
+      <input type="checkbox" th:field="*{fullTank}" />
+    </div>
+    <div>
+      <label>Odómetro:</label>
+      <input type="number" step="0.1" th:field="*{odometer}" placeholder="Valor del odómetro" />
+    </div>
+    <div>
+      <label>Observaciones (opcional):</label>
+      <textarea th:field="*{observations}"></textarea>
+    </div>
+    <button type="submit" id="submitRefuelButton">Registrar Repostaje</button>
 
-<!-- Mostrar errores si existen -->
-<div th:if="${#fields.hasErrors()}">
-  <ul>
-    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-  </ul>
+    <!-- Bloque para mostrar errores: se evalúa en el contexto del objeto "refuel" -->
+    <div id="errorMessage" th:if="${#fields.hasErrors()}">
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+      </ul>
+    </div>
+  </form>
 </div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

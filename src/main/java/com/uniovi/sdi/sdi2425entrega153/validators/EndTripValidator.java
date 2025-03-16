@@ -22,29 +22,40 @@ public class EndTripValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Path path = (Path) target;
 
+        // 1. Comprobar que se ha indicado el ID del trayecto
         if (path.getId() == null) {
             errors.reject("path.id.required", "No se ha indicado el trayecto a finalizar.");
             return;
         }
 
+        // 2. Recuperar el trayecto real de la BD
         Path dbPath = pathService.getPath(path.getId());
         if (dbPath == null) {
             errors.reject("path.notFound", "No se ha encontrado el trayecto indicado.");
             return;
         }
 
-        // El empleado solo puede finalizar un trayecto si está en curso (finalConsumption == 0)
-        if (dbPath.getFinalConsumption() != 0) {
+        // 3. Comprobar que está activo (finalConsumption == 0)
+        if (dbPath.getFinalConsumption() != null && dbPath.getFinalConsumption() != 0) {
             errors.reject("path.notActive", "No se puede finalizar un trayecto que no está en curso.");
         }
 
-        // El odómetro es obligatorio y debe ser un número positivo superior al valor del odómetro al inicio del trayecto
-        double finalOdometer = path.getFinalConsumption();
-        if (finalOdometer <= 0) {
+        // 4. Ver si hay un error de conversión en finalConsumption (por ejemplo, campo vacío o texto no numérico)
+        if (errors.hasFieldErrors("finalConsumption")) {
+            // Con esto evitamos hacer más validaciones; el error de conversión ya está registrado
+            return;
+        }
+
+        // 5. Validar el valor final una vez parseado correctamente
+        Double finalOdometer = path.getFinalConsumption();
+        if (finalOdometer == null) {
+            errors.rejectValue("finalConsumption", "typeMismatch.finalConsumption");
+        } else if (finalOdometer <= 0) {
             errors.rejectValue("finalConsumption", "finalConsumption.positive", "El odómetro final debe ser un número positivo.");
         } else if (finalOdometer <= dbPath.getInitialConsumption()) {
             errors.rejectValue("finalConsumption", "finalConsumption.invalid",
                     "El odómetro final debe ser mayor que el inicial (" + dbPath.getInitialConsumption() + ").");
         }
     }
+
 }

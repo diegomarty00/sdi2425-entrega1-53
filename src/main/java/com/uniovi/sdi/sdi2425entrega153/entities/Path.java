@@ -12,8 +12,14 @@ public class Path {
     private Date startDate;             // Fecha y hora de inicio
     private double time;                // Tiempo del recorrido
     private double initialConsumption;  // Consumo antes del reccorido del recorrido
-    private double finalConsumption;     // Consumo despues del recorrido
+    private Double finalConsumption;     // Consumo despues del recorrido
     private String vehicleRegistration; // Matricula del coche
+
+    private Date endDate;
+    private String observations;
+
+
+
     private double kilometers;          // Kilometros del trayecto
     @Column(name = "user_dni")
     private String userDni;
@@ -58,7 +64,21 @@ public class Path {
     public Long getId() {
         return id;
     }
+    public Date getEndDate() {
+        return endDate;
+    }
 
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
+    }
     public void setId(Long id) {
         this.id = id;
     }
@@ -87,11 +107,11 @@ public class Path {
         this.initialConsumption = initialConsumption;
     }
 
-    public double getFinalConsumption() {
+    public Double getFinalConsumption() {
         return finalConsumption;
     }
 
-    public void setFinalConsumption(double finalConsumption) {
+    public void setFinalConsumption(Double finalConsumption) {
         this.finalConsumption = finalConsumption;
     }
 

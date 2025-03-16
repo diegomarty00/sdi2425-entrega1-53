@@ -85,20 +85,37 @@ public class PathService {
             pathRepository.updateResend(revised, id);
         }
     }
+    public Path createActivePathForVehicle(String vehicleRegistration, String userDni) {
+        Path path = new Path();
+        path.setVehicleRegistration(vehicleRegistration);
+        path.setUserDni(userDni);
+        path.setStartDate(new Date());
+        double initialOdometer = getLastOdometerForVehicle(vehicleRegistration);
+        path.setInitialConsumption(initialOdometer);
+        path.setFinalConsumption(0.0);
+        pathRepository.save(path);
+        return path;
+    }
     /**
      * Finaliza un trayecto activo.
      * Se actualiza el campo finalConsumption, se calcula el tiempo transcurrido y la distancia recorrida.
      *
-     * @param pathId        Identificador del trayecto a finalizar.
-     * @param finalOdometer Valor ingresado para el odómetro final.
-     * @param observations  Observaciones que podrían almacenarse o usarse para el log.
+     * @param path
      */
-    public void endPath(Long pathId, double finalOdometer, String observations) {
-        Optional<Path> optPath = pathRepository.findById(pathId);
-        if (!optPath.isPresent()) {
-            throw new IllegalArgumentException("Trayecto no encontrado.");
-        }
+    public void endPath(Path path) {
+        // Recuperar desde la BD el path real
+        Path dbPath = pathRepository.findById(path.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Trayecto no encontrado."));
+
+        // Actualizar campos, por ejemplo:
+        dbPath.setFinalConsumption(path.getFinalConsumption());
+        dbPath.setObservations(path.getObservations());
+        dbPath.setEndDate(new Date());
+
+        // Guardar
+        pathRepository.save(dbPath);
     }
+
 
     public void addPath(Path path) {
 
@@ -117,7 +134,7 @@ public class PathService {
         double initialOdometer = getLastOdometerForVehicle(path.getVehicleRegistration());
         path.setInitialConsumption(initialOdometer);
         // Establece finalConsumption en 0 para indicar que el trayecto está activo.
-        path.setFinalConsumption(0);
+        path.setFinalConsumption(0.0);
         pathRepository.save(path);
     }
 

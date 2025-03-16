@@ -1,35 +1,47 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"/>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
 <body>
-<!-- Barra de Navegación superior -->
-<nav th:replace="fragments/nav"/>
+<!-- Barra de navegación -->
+<nav th:replace="fragments/nav :: nav"></nav>
 
-<body>
-<h1>Finalizar Trayecto</h1>
+<div class="container">
+  <h1>Finalizar Trayecto</h1>
 
-<!-- Se muestra información del trayecto activo -->
-<div>
-  <p>Vehículo: <span th:text="${activePath.vehicleRegistration}"></span></p>
-  <p>Odómetro inicial: <span th:text="${activePath.initialConsumption}"></span></p>
+  <!-- Se muestra información del trayecto activo -->
+  <div>
+    <p>Vehículo: <span th:text="${activePath.vehicleRegistration}"></span></p>
+    <p>Odómetro inicial: <span th:text="${activePath.initialConsumption}"></span></p>
+  </div>
+
+  <!-- Formulario para finalizar trayecto -->
+  <form th:action="@{/path/end}" th:object="${activePath}" method="post">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <div>
+      <label for="finalConsumption">Odómetro Final:</label>
+      <!-- Asegúrate de que th:field utiliza el nombre correcto de la propiedad -->
+      <input type="number" step="0.1" th:field="*{finalConsumption}" id="finalConsumption" placeholder="Valor final del odómetro"/>
+    </div>
+    <div>
+      <label for="observations">Observaciones (opcional):</label>
+      <textarea th:field="*{observations}" id="observations" placeholder="Observaciones..."></textarea>
+    </div>
+
+
+    <!-- Bloque para mostrar errores: se evalúa en el contexto del objeto "activePath" -->
+    <div id="errorMessage" th:if="${#fields.hasErrors()}">
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+      </ul>
+    </div>
+    <button type="submit" id="submitEndButton">Finalizar Trayecto</button>
+  </form>
 </div>
 
-<!-- Formulario para finalizar trayecto -->
-<form th:action="@{/path/end}" method="post">
-  <div>
-    <label for="finalOdometer">Odómetro Final:</label>
-    <input type="number" step="0.1" id="finalOdometer" name="finalOdometer" placeholder="Valor final del odómetro" required />
-  </div>
-  <div>
-    <label for="observations">Observaciones (opcional):</label>
-    <textarea id="observations" name="observations" placeholder="Observaciones..."></textarea>
-  </div>
-  <button type="submit">Finalizar Trayecto</button>
-</form>
-
-<!-- Mostrar errores, si existen -->
-<div th:if="${error != null}">
-  <p th:text="${error}" style="color: red;"></p>
-</div>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
