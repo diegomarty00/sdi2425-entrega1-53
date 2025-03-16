@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.entities;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -68,6 +69,16 @@ public class Refuel {
         this.id = id;
     }
 
+    public String getOnlyDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(getDateTime());
+    }
+
+    public String getOnlyTime() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        return timeFormat.format(getDateTime());
+    }
+
     public String getVehicleRegistration() {
         return vehicleRegistration;
     }
@@ -98,6 +109,10 @@ public class Refuel {
 
     public void setFuelQuantity(double fuelQuantity) {
         this.fuelQuantity = fuelQuantity;
+    }
+
+    public double priceTotal(){
+        return fuelPrice * fuelQuantity;
     }
 
     public boolean isFullTank() {
