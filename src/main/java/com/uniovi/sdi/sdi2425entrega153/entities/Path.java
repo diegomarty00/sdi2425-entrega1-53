@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.entities;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -55,7 +56,8 @@ public class Path {
         this.finalConsumption = finalConsumption;
         this.vehicleRegistration = vehicleRegistration;
         this.kilometers = kilometers;
-        this.user = new User();
+        this.user = user;
+        this.userDni = user.getDni();
     }
 
     public void setUserDni(String userDni) {
@@ -85,6 +87,16 @@ public class Path {
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public String getOnlyDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(getStartDate());
+    }
+
+    public String getOnlyTime() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        return timeFormat.format(getStartDate());
     }
 
     public void setStartDate(Date startDate) {

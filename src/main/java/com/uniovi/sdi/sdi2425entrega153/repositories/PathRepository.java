@@ -21,7 +21,7 @@ public interface PathRepository extends CrudRepository<Path, Long> {
     // Busca un trayecto activo para un vehículo (finalConsumption == 0)
     Optional<Path> findByVehicleRegistrationAndFinalConsumption(String vehicleRegistration, double finalConsumption);
     @Query("SELECT r FROM Path r WHERE r.vehicleRegistration = ?1 ORDER BY r.id ASC")
-    Page<Path> findAllByVehicle(Pageable pageable, Vehicle Vehicle);
+    Page<Path> findAllByVehiclePlate(Pageable pageable, String plate);
 
     @Query("SELECT r FROM Path r  WHERE r.user = ?1 ORDER BY r.startDate ASC")
     Page<Path> findAllByUser(Pageable pageable, User user);

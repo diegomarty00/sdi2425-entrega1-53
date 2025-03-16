@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2 th:text="#{paths}"></h2>
+    <h2 th:text="#{paths}"> - <span th:text="${vehicle.plate}"></span></h2>
 
-    <p th:text="#{paths.personal.info}">:</p>
+    <p th:text="#{paths.info}">:</p>
 
     <div class="table-responsive">
 
@@ -18,21 +18,17 @@
             <tr>
                 <th scope="col" th:text="#{path.date.initial}"></th>
                 <th scope="col" th:text="#{path.time.initial}"></th>
-                <th scope="col" th:text="#{vehicle.registration}"></th>
-                <th scope="col" th:text="#{path.duration.hours}"></th>
-                <th scope="col" th:text="#{path.odometer.initial}"></th>
-                <th scope="col" th:text="#{path.odometer.final}"></th>
+                <th scope="col" th:text="#{driver}"></th>
+                <th scope="col" th:text="#{vehicle.kilometraje}"></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="path : ${pathList}">
+            <tr th:each="path : ${paths}">
                 <td th:text="${path.getOnlyDate()}"></td>
                 <td th:text="${path.getOnlyTime()}"></td>
-                <td th:text="${path.vehicleRegistration}"></td>
-                <td th:text="${path.time}"></td>
-                <td th:text="${path.initialConsumption}"></td>
-                <td th:text="${path.finalConsumption}"></td>
+                <td th:text="${path.user.name}"></td>
+                <td th:text="${path.kilometers}"></td>
             </tr>
             </tbody>
 

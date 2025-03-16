@@ -46,18 +46,25 @@ public class VehicleController {
 
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
-        return "vehicles/listVehicles";
+        return "vehicle/listVehicles";
     }
 
 
     @RequestMapping("/vehicle/free")
     public String listVehicleFree(Model model, Pageable pageable) {
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 5);
         Page<Vehicle> vehicles = vehicleService.findFree(pageable);
         model.addAttribute("vehicles", vehicles.getContent());
         model.addAttribute("page", vehicles);
-        return "vehicles/listFreeVehicles";
+        return "vehicle/listFreeVehicles";
     }
 
+    @RequestMapping("/vehicle/free/update")
+    public String updateFree(Model model, Pageable pageable) {
+        Page<Vehicle> vehicles = vehicleService.findFree(pageable);
+        model.addAttribute("vehicles", vehicles.getContent());
+        return "vehicle/free :: vehiclesTable";
+    }
 
     @RequestMapping(value = "/vehicle/register", method = RequestMethod.POST)
     public String register(@Validated Vehicle vehicle, BindingResult result, Model model) { //@ModelAttribute Vehicle vehicle
@@ -66,7 +73,7 @@ public class VehicleController {
         if (result.hasErrors()) {
 
             model.addAttribute("fuelTypes", Vehicle.FUEL_TYPES.values());
-            return "vehicles/registerVehicle";
+            return "vehicle/registerVehicle";
         }
 
         vehicleService.addVehicle(vehicle);
@@ -78,7 +85,7 @@ public class VehicleController {
 
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("fuelTypes", Vehicle.FUEL_TYPES.values());
-        return "vehicles/registerVehicle";
+        return "vehicle/registerVehicle";
     }
 
     @RequestMapping("/vehicle/list/update")
@@ -88,27 +95,23 @@ public class VehicleController {
         return "vehicle/list :: vehiclesTable";
     }
 
-    @RequestMapping("/vehicle/details/{id}")
-    public String getDetail(Model model, @PathVariable String id) {
-        model.addAttribute("vehicle", vehicleService.findByPlate(id));
-        return "vehicle/details";
-    }
-
     @RequestMapping("/vehicle/paths/{id}")
-    public String getVehicleTrips(Model model, @PathVariable String id, Pageable pageable) {
-        Page<Path> paths = pathService.findByPlate(id, pageable);
-        Vehicle vehicle = vehicleService.findByPlate(id);
-        model.addAttribute("vehicle", vehicleService.findByPlate(id));
-        model.addAttribute("paths", paths);
-        return "vehicle/path";
+    public String getVehiclePaths(Model model, @PathVariable Long id, Pageable pageable) {
+        Vehicle vehicle = vehicleService.getVehicle(id);
+        Page<Path> paths = pathService.findByVehiclePlate(vehicle.getPlate(), pageable);
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("paths", paths.getContent());
+        model.addAttribute("page", paths);
+        return "vehicle/paths";
     }
 
     @RequestMapping("/vehicle/refuels/{id}")
-    public String getVehicleRefuels(Model model, @PathVariable String id, Pageable pageable) {
-        Page<Refuel> refuels = refuelService.findByPlate(id, pageable);
-        Vehicle vehicle = vehicleService.findByPlate(id);
-        model.addAttribute("vehicle", vehicleService.findByPlate(id));
-        model.addAttribute("refuels", refuels);
+    public String getVehicleRefuels(Model model, @PathVariable Long id, Pageable pageable) {
+        Vehicle vehicle = vehicleService.getVehicle(id);
+        Page<Refuel> refuels = refuelService.findByVehiclePlate(vehicle.getPlate(), pageable);
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("refuels", refuels.getContent());
+        model.addAttribute("page", refuels);
         return "vehicle/refuels";
     }
 
