@@ -56,12 +56,12 @@ public class UsersController {
 
     @RequestMapping(value = "/user/edit/{id}", method = RequestMethod.POST)
     public String edit(@PathVariable Long id, @ModelAttribute User user, BindingResult result, Model model) {
-        editFormValidator.validate(user, result);
+        User originalUser = usersService.getUser(id);
+        editFormValidator.validate(user, result, originalUser.getDni());
         if(result.hasErrors()) {
             model.addAttribute("roles", Arrays.asList(rolesService.getRoles()));
             return "user/edit";
         }
-        User originalUser = usersService.getUser(id);
         originalUser.setDni(user.getDni());
         originalUser.setName(user.getName());
         originalUser.setLastName(user.getLastName());
@@ -78,7 +78,7 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
-        return "redirect:/home";
+        return "redirect:/user/list";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.POST)
