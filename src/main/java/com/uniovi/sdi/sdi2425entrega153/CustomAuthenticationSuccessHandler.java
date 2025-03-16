@@ -19,7 +19,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (role.contains("ROLE_ADMIN")) {
             response.sendRedirect("/user/list");  //redirigir al listado de empleados
         } else if (role.contains("ROLE_STANDARD")) {
-            response.sendRedirect("/home");  // CAMBIAR a /path/list cuando este hecho !!!!  redirigir al listado de trayectos del usuario
+            response.sendRedirect("/path/list");  // CAMBIAR a /path/list cuando este hecho !!!!  redirigir al listado de trayectos del usuario
         } else {
             response.sendRedirect("/");
         }
