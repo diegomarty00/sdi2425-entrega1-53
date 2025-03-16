@@ -9,30 +9,30 @@
     <h2 th:text="#{refuel.register}"></h2>
     <form th:action="@{/refuel/new}" th:object="${refuel}" method="post">
         <div>
-            <label>Estación de Servicio:</label>
-            <input type="text" th:field="*{stationName}" placeholder="Nombre de la estación"/>
+            <label th:text="#{refuel.station}">:</label>
+            <input type="text" th:field="*{stationName}" />
         </div>
         <div>
-            <label>Precio (€/unidad):</label>
-            <input type="number" step="0.01" th:field="*{fuelPrice}" placeholder="Precio por unidad"/>
+            <label th:text="#{refuel.price}">:</label>
+            <input type="number" step="0.01" th:field="*{fuelPrice}" />
         </div>
         <div>
-            <label>Cantidad repostada:</label>
-            <input type="number" step="0.01" th:field="*{fuelQuantity}" placeholder="Cantidad"/>
+            <label th:text="#{refuel.quantity}">:</label>
+            <input type="number" step="0.01" th:field="*{fuelQuantity}" />
         </div>
         <div>
-            <label>¿Depósito lleno?</label>
+            <label th:text="#{refuel.isFullTank}"></label>
             <input type="checkbox" th:field="*{fullTank}"/>
         </div>
         <div>
-            <label>Odómetro:</label>
-            <input type="number" step="0.1" th:field="*{odometer}" placeholder="Valor del odómetro"/>
+            <label th:text="#{refuel.odometer}">:</label>
+            <input type="number" step="0.1" th:field="*{odometer}" />
         </div>
         <div>
-            <label>Observaciones (opcional):</label>
+            <label th:text="#{observations.optional}">:</label>
             <textarea th:field="*{observations}"></textarea>
         </div>
-        <button type="submit">Registrar Repostaje</button>
+        <button type="submit" th:text="#{send}"></button>
     </form>
 
     <!-- Mostrar errores si existen -->

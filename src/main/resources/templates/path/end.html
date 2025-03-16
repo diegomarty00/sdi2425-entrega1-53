@@ -8,22 +8,33 @@
     <h2 th:text="#{Nav.paths.end}"></h2>
     <!-- Se muestra información del trayecto activo -->
     <div>th:text="#{page.last}"
-        <p><span th:text="#{vehicle}">: </span> <span th:text="${activePath.vehicleRegistration}"></span></p>
-        <p><span th:text="#{path.odometer.initial}"></span>: <span th:text="${activePath.initialConsumption}"></span></p>
+        <p th:text="#{vehicle}">: <span th:text="${activePath.vehicleRegistration}"></span></p>
+        <p th:text="#{path.odometer.initial}">: <span th:text="${activePath.initialConsumption}"></span></p>
     </div>
 
     <!-- Formulario para finalizar trayecto -->
-    <form th:action="@{/path/end}" method="post">
+    <form th:action="@{/path/end}" th:object="${activePath}" method="post">
+
+        <input type="hidden" th:field="*{id}" />
+
         <div>
-            <label for="finalOdometer"><span th:text="#{path.odometer.final}"></span>:</label>
-            <input type="number" step="0.1" id="finalOdometer" name="finalOdometer"
-                   placeholder="Valor final del odómetro" required/>
+            <label for="finalConsumption" th:text="#{path.odometer.final}">:</label>
+            <!-- Asegúrate de que th:field utiliza el nombre correcto de la propiedad -->
+            <input type="number" step="0.1" th:field="*{finalConsumption}" id="finalConsumption" placeholder="Valor final del odómetro"/>
         </div>
         <div>
-            <label for="observations"><span th:text="#{observations.optional}"></span>:</label>
-            <textarea id="observations" name="observations" placeholder="Observaciones..."></textarea>
+            <label for="observations" th:text="#{observations.optional}">:</label>
+            <textarea th:field="*{observations}" id="observations" placeholder="Observaciones..."></textarea>
         </div>
-        <button type="submit"><span th:text="#{Nav.paths.end}"></span></button>
+
+
+        <!-- Bloque para mostrar errores: se evalúa en el contexto del objeto "activePath" -->
+        <div id="errorMessage" th:if="${#fields.hasErrors()}">
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+            </ul>
+        </div>
+        <button type="submit" id="submitEndButton" th:text="#{Nav.paths.end}"></button>
     </form>
 
     <!-- Mostrar errores, si existen -->
