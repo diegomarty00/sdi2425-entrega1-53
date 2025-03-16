@@ -24,9 +24,7 @@
 
         <!-- Formulario para eliminar vehículos seleccionados -->
         <form id="deleteForm" method="post" action="/vehicle/delete" onsubmit="return validateDeleteForm();">
-            <button type="submit" class="btn btn-danger">
-                Eliminar seleccionados
-            </button>
+            <button type="submit" class="btn btn-danger" th:text="#{vehicle.delete}"></button>
 
 
             <table class="table table-hover" id="vehiclesTable">
@@ -77,10 +75,10 @@
     function validateDeleteForm() {
         let checkboxes = document.querySelectorAll("input[name='selectedVehicles']:checked");
         if (checkboxes.length === 0) {
-            alert([[#{delete.validation.message}]]); // Usa el mensaje internacionalizado
+            alert(validationMessage); // Usa el mensaje internacionalizado
             return false; // Evita el envío del formulario
         }
-        return confirm([[#{delete.confirmation.message}]]); // Usa el mensaje internacionalizado
+        return confirm(confirmationMessage); // Usa el mensaje internacionalizado
     }
 
     // Funcionalidad de "Seleccionar todos"

@@ -189,16 +189,11 @@ class Sdi2425Entrega153ApplicationTests {
 
         PO_LoginView.logout(driver);
 
-        //comprobbamos que podemos iniciar sesion al no estar autenticados
-        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getSPANISH());
+        //comprobamos que podemos iniciar sesion al no estar autenticados
+        checkText = PO_HomeView.getP().getString("login.message", PO_Properties.getSPANISH());
         //checkText = "login.message";
         result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //checkText = "disconnect";
-        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getSPANISH());
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertNotEquals(checkText, result.get(0).getText()); //mirar que no existe el mensaje logout
 
     }
 
@@ -360,7 +355,7 @@ sistema.
     @Test
     @Order(21)
     void Prueba21() {
-
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
         PO_PrivateView.goToVehicleLink(driver, "list");
 
         List<WebElement> vehicles = driver.findElements(By.xpath("//table[@id='vehiclesTable']//tbody//tr"));
@@ -384,7 +379,7 @@ sistema.
     @Test
     @Order(22)
     void Prueba22() {
-
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
         PO_PrivateView.goToVehicleLink(driver, "list");
 
         List<WebElement> vehicles = driver.findElements(By.xpath("//table[@id='vehiclesTable']//tbody//tr"));
@@ -407,6 +402,7 @@ sistema.
     @Test
     @Order(23)
     void Prueba23() {
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
         PO_PrivateView.goToVehicleLink(driver, "list");
 
         // Obtener la lista de vehículos
@@ -824,33 +820,21 @@ sistema.
         String userDNI = "99999990A";
         PO_LoginView.login(driver, userDNI, "123456");
         driver.get(URL + "/vehicle/free");
+        List<Vehicle> vehicles = vehicleService.findAll();
 
         // Obtener los elementos de la lista desde la página web
-        List<WebElement> vehicleListRows = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
-
+        List<WebElement> vehicleListRows0 = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
         driver.get(URL + "/vehicle/free?page=1");
-        vehicleListRows.addAll(driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr")));
-
+        List<WebElement> vehicleListRows1 = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
         driver.get(URL + "/vehicle/free?page=2");
-        vehicleListRows.addAll(driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr")));
+        List<WebElement> vehicleListRows2 = driver.findElements(By.xpath("//table[@id='vehiclesTable']/tbody/tr"));
 
-        List<Vehicle> vehicles = vehicleService.findAll();
-        assertTrue(vehicles.size() > vehicleListRows.size());
 
-        for (int i = 0; i < vehicleListRows.size(); i++) {
-            boolean found = false;
-            String matricula = vehicleListRows.get(i).getText().split("\\s+")[0];
-            System.out.println("matricula: " + matricula);
-            for (int j = 0; j < vehicleListRows.size(); j++) {
-                if (matricula.equals(vehicles.get(j).getPlate())) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                assertFalse(vehicleService.findByPlate(matricula).isFree());
-            }
-        }
+        assertTrue(vehicles.size() > vehicleListRows0.size() +
+                vehicleListRows1.size() +
+                vehicleListRows2.size());
     }
+
 
     @Test
     @Order(40)

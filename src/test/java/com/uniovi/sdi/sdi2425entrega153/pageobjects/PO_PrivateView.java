@@ -1,17 +1,31 @@
 package com.uniovi.sdi.sdi2425entrega153.pageobjects;
 
+import com.uniovi.sdi.sdi2425entrega153.CustomConfiguration;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
+import com.uniovi.sdi.sdi2425entrega153.repositories.VehicleRepository;
 import com.uniovi.sdi.sdi2425entrega153.util.SeleniumUtils;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 public class PO_PrivateView extends PO_NavView {
+
+    private static CustomConfiguration cc;
+    VehicleRepository vehicleService;
+    static String URL = "http://localhost:8100";
 
     static public void registerUser(WebDriver driver) {
         goToUserLink(driver, "register");
@@ -197,8 +211,15 @@ public class PO_PrivateView extends PO_NavView {
 
     static public void listVehicles(WebDriver driver, List<Vehicle> vehicles) {
         goToVehicleLink(driver, "list");
+        List<WebElement> vehiclesPage = driver.findElements(By.xpath("//table[@id='vehiclesTable']//tbody//tr"));
+        int counter = 0;
+
         for (Vehicle vehicle : vehicles) {
+            if (counter!=0)
+                if (counter%vehiclesPage.size() == 0)
+                    driver.get(URL + "/vehicle/list?page=" + (int)counter/vehiclesPage.size());
             if (!findVehicle(driver, vehicle)) Assertions.fail("Vehicle not found");
+            counter++;
         }
     }
 
@@ -263,9 +284,29 @@ public class PO_PrivateView extends PO_NavView {
         // Click en el botón de eliminar vehículos
         WebElement deleteButton = driver.findElement(By.xpath("//form[@id='deleteForm']/button"));
         deleteButton.click();
+
+        // Manejar la alerta de confirmación
+        try {
+            // Esperamos hasta que la alerta esté presente
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.alertIsPresent());
+
+            // Aceptamos la alerta
+            Alert alert = driver.switchTo().alert();
+            alert.accept();
+        } catch (Exception e) {
+            System.out.println("No se encontró la alerta.");
+        }
     }
 
+
     public static void verifyVehicleDisappeared(WebDriver driver, String vehiclePlate) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Esperamos hasta que el vehículo ya no esté presente en la lista
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//td[text()='" + vehiclePlate + "']")));
+
+        // Verificamos que el vehículo ya no esté en la lista
         List<WebElement> vehicles = driver.findElements(By.xpath("//table[@id='vehiclesTable']//tbody//tr"));
         boolean found = false;
 
