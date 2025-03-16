@@ -6,18 +6,11 @@
 <nav th:replace="fragments/nav"/>
 <div class="container" style="text-align: center">
   <h2 th:text="#{welcome.message}"></h2>
-  <h3>Esta es una zona privada la web</h3>
+  <h3 th:text="#{Home.message}"></h3>
   <p>
-    Usuario Autenticado como :
-    <b th:text="${user.name}"> </b>
-
+    <span th:text="#{Home.user.identification}"></span> :
+    <b th:text="${user.name}"></b> - <b th:text="${#httpServletRequest.remoteUser}"></b>
   </p>
-
-  <p>Usuario autenticado: <b th:text="${#httpServletRequest.remoteUser}"></b></p>
-  <p>Security Principal: <b th:text="${#authentication.principal}"></b></p>
-
-
-
 
 </div>
 <footer th:replace="fragments/footer"/>

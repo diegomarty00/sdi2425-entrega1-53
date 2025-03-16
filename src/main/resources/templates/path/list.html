@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Trayectos</h2>
+    <h2 th:text="#{paths}"></h2>
 
-    <p>Losa trayectos personales que has realizado son los siguientes:</p>
+    <p th:text="#{paths.personal.info}">:</p>
 
     <div class="table-responsive">
 
@@ -16,12 +16,12 @@
 
             <thead>
             <tr>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Hora de inicio</th>
-                <th scope="col">Matrícula</th>
-                <th scope="col">Duración (horas)</th>
-                <th scope="col">Odómetro inicio</th>
-                <th scope="col">Odómetro final</th>
+                <th scope="col" th:text="#{path.date.initial}"></th>
+                <th scope="col" th:text="#{path.time.initial}"></th>
+                <th scope="col" th:text="#{vehicle.registration}"></th>
+                <th scope="col" th:text="#{path.duration.hours}"></th>
+                <th scope="col" th:text="#{path.odometer.initial}"></th>
+                <th scope="col" th:text="#{path.odometer.final}"></th>
             </tr>
             </thead>
 

@@ -4,32 +4,33 @@
 <body>
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
+<div class="container">
+    <h2 th:text="#{Nav.paths.end}"></h2>
+    <!-- Se muestra información del trayecto activo -->
+    <div>th:text="#{page.last}"
+        <p><span th:text="#{vehicle}">: </span> <span th:text="${activePath.vehicleRegistration}"></span></p>
+        <p><span th:text="#{path.odometer.initial}"></span>: <span th:text="${activePath.initialConsumption}"></span></p>
+    </div>
 
-<body>
-<h1>Finalizar Trayecto</h1>
+    <!-- Formulario para finalizar trayecto -->
+    <form th:action="@{/path/end}" method="post">
+        <div>
+            <label for="finalOdometer"><span th:text="#{path.odometer.final}"></span>:</label>
+            <input type="number" step="0.1" id="finalOdometer" name="finalOdometer"
+                   placeholder="Valor final del odómetro" required/>
+        </div>
+        <div>
+            <label for="observations"><span th:text="#{observations.optional}"></span>:</label>
+            <textarea id="observations" name="observations" placeholder="Observaciones..."></textarea>
+        </div>
+        <button type="submit"><span th:text="#{Nav.paths.end}"></span></button>
+    </form>
 
-<!-- Se muestra información del trayecto activo -->
-<div>
-  <p>Vehículo: <span th:text="${activePath.vehicleRegistration}"></span></p>
-  <p>Odómetro inicial: <span th:text="${activePath.initialConsumption}"></span></p>
+    <!-- Mostrar errores, si existen -->
+    <div th:if="${error != null}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
 </div>
-
-<!-- Formulario para finalizar trayecto -->
-<form th:action="@{/path/end}" method="post">
-  <div>
-    <label for="finalOdometer">Odómetro Final:</label>
-    <input type="number" step="0.1" id="finalOdometer" name="finalOdometer" placeholder="Valor final del odómetro" required />
-  </div>
-  <div>
-    <label for="observations">Observaciones (opcional):</label>
-    <textarea id="observations" name="observations" placeholder="Observaciones..."></textarea>
-  </div>
-  <button type="submit">Finalizar Trayecto</button>
-</form>
-
-<!-- Mostrar errores, si existen -->
-<div th:if="${error != null}">
-  <p th:text="${error}" style="color: red;"></p>
-</div>
+    <footer th:replace="fragments/footer"/>
 </body>
 </html>

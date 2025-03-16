@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Trayectos - <span th:text="${vehicle.plate}"></span></h2>
+    <h2 th:text="#{paths}"> - <span th:text="${vehicle.plate}"></span></h2>
 
-    <p>Los trayectos que se han realizado son los siguientes:</p>
+    <p th:text="#{paths.info}">:</p>
 
     <div class="table-responsive">
 
@@ -16,10 +16,10 @@
 
             <thead>
             <tr>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Hora de inicio</th>
-                <th scope="col">Conductor</th>
-                <th scope="col">Kilometros</th>
+                <th scope="col" th:text="#{path.date.initial}"></th>
+                <th scope="col" th:text="#{path.time.initial}"></th>
+                <th scope="col" th:text="#{driver}"></th>
+                <th scope="col" th:text="#{vehicle.kilometraje}"></th>
             </tr>
             </thead>
 

@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2>Repostajes - <span th:text="${vehicle.plate}"></span></h2>
+    <h2 th:text="#{refuels}"> - <span th:text="${vehicle.plate}"></span></h2>
 
-    <p>Los repostajes que se han realizado son los siguientes:</p>
+    <p th:text="#{refuels.info}">:</p>
 
     <div class="table-responsive">
 
@@ -16,10 +16,14 @@
 
             <thead>
             <tr>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Hora de inicio</th>
-                <th scope="col">Conductor</th>
-                <th scope="col">Kilometros</th>
+                <th scope="col" th:text="#{refuel.date.initial}"></th>
+                <th scope="col" th:text="#{refuel.time.initial}"></th>
+                <th scope="col" th:text="#{refuel.odometer}"></th>
+                <th scope="col" th:text="#{refuel.type}"></th>
+                <th scope="col" th:text="#{refuel.station}"></th>
+                <th scope="col" th:text="#{refuel.price}"></th>
+                <th scope="col" th:text="#{refuel.quantity}"></th>
+                <th scope="col" th:text="#{refuel.total.price}"></th>
             </tr>
             </thead>
 
@@ -27,8 +31,12 @@
             <tr th:each="refuel : ${refuels}">
                 <td th:text="${refuel.getOnlyDate()}"></td>
                 <td th:text="${refuel.getOnlyTime()}"></td>
-                <td th:text="${refuel.user.name}"></td>
-                <td th:text="${refuel.kilometers}"></td>
+                <td th:text="${refuel.odometer}"></td>
+                <td th:text="${vehicle.fuelType}"></td>
+                <td th:text="${refuel.stationName}"></td>
+                <td th:text="${refuel.fuelPrice}"></td>
+                <td th:text="${refuel.fuelQuantity}"></td>
+                <td th:text="${refuel.priceTotal()}"></td>
             </tr>
             </tbody>
 
