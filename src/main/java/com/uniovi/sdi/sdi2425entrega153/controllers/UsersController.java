@@ -1,6 +1,8 @@
 package com.uniovi.sdi.sdi2425entrega153.controllers;
 
+import com.uniovi.sdi.sdi2425entrega153.entities.LogEntry;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
+import com.uniovi.sdi.sdi2425entrega153.services.LogService;
 import com.uniovi.sdi.sdi2425entrega153.services.RolesService;
 import com.uniovi.sdi.sdi2425entrega153.services.UsersService;
 import com.uniovi.sdi.sdi2425entrega153.validators.EditFormValidator;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class UsersController {
@@ -28,14 +32,28 @@ public class UsersController {
     private final PasswordChangeFormValidator passwordChangeFormValidator;
     private final EditFormValidator editFormValidator;
 
+    private final LogService logService;
+
     public UsersController(UsersService usersService, RegisterFormValidator registerFormValidator,
                            PasswordChangeFormValidator passwordChangeFormValidator,
-                           RolesService rolesService, EditFormValidator editFormValidator) {
+                           RolesService rolesService, EditFormValidator editFormValidator, LogService logService) {
         this.usersService = usersService;
         this.registerFormValidator = registerFormValidator;
         this.passwordChangeFormValidator = passwordChangeFormValidator;
         this.editFormValidator = editFormValidator;
         this.rolesService = rolesService;
+        this.logService = logService;
+    }
+
+    //imprimir logs antes de cada solicitud
+    @ModelAttribute
+    public void printLogs() {
+        List<LogEntry> logs = logService.getAllLogs();
+        System.out.println("=== Logs en la base de datos ===");
+        for (LogEntry log : logs) {
+            System.out.println(log);
+        }
+        System.out.println("===============================");
     }
 
     @RequestMapping("/user/list")
@@ -43,8 +61,24 @@ public class UsersController {
         Page<User> users = usersService.getUsers(pageable);
         model.addAttribute("usersList", users.getContent());
         model.addAttribute("page", users);
+
+        logService.saveLog(getCurrentUsername(), "PET", "/user/list");
+
         return "user/list";
     }
+
+    @RequestMapping("/user/logs")
+    public String logs(Model model, Pageable pageable) {
+        List<LogEntry> logs = logService.getAllLogs();
+        Collections.reverse(logs);
+        model.addAttribute("logsList", logs);
+
+        logService.saveLog(getCurrentUsername(), "PET", "/user/logs");
+
+        return "user/listLogs";
+    }
+
+
 
     @RequestMapping(value = "/user/edit/{id}")
     public String edit(Model model, @PathVariable Long id) {
@@ -78,6 +112,11 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
+
+        String username = getCurrentUsername();
+        logService.saveLog(username, "PET", "/user/register");
+        logService.saveLog(username, "ALTA", "Usuario registrado: " + user.getDni());
+
         return "redirect:/user/list";
     }
 
@@ -91,6 +130,9 @@ public class UsersController {
         User activeUser = usersService.getUserByDni(dni);
         activeUser.setPassword(user.getPassword());
         usersService.changePassword(activeUser);
+
+        logService.saveLog(dni, "PET", "/password-change");
+
         return "redirect:/home";
     }
 
@@ -112,6 +154,9 @@ public class UsersController {
         User activeUser = usersService.getUserByDni(dni);
 
         model.addAttribute("user", activeUser);
+
+        logService.saveLog(dni, "PET", "/home");
+
         return "home";
     }
 
@@ -123,10 +168,16 @@ public class UsersController {
         return "user/register";
     }
 
+
     @RequestMapping("/user/list/update")
     public String updateList(Model model, Pageable pageable) {
         Page<User> users = usersService.getUsers(pageable);
         model.addAttribute("usersList", users.getContent());
         return "user/list :: usersTable";
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }

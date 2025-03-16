@@ -2,13 +2,17 @@ package com.uniovi.sdi.sdi2425entrega153.controllers;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.Path;
 import com.uniovi.sdi.sdi2425entrega153.entities.Refuel;
+import com.uniovi.sdi.sdi2425entrega153.services.LogService;
 import com.uniovi.sdi.sdi2425entrega153.services.PathService;
 import com.uniovi.sdi.sdi2425entrega153.services.RefuelService;
 import com.uniovi.sdi.sdi2425entrega153.services.VehicleService;
 import com.uniovi.sdi.sdi2425entrega153.validators.VehicleRegistrationValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +32,9 @@ public class VehicleController {
     private final VehicleRegistrationValidation vehicleRegistrationValidation;
     private final PathService pathService;
     private final RefuelService refuelService;
+
+    @Autowired
+    private LogService logService; //inyectamos LogService
 
     public VehicleController(VehicleService vehicleService,
                              VehicleRegistrationValidation vehicleRegistrationValidation,
@@ -77,6 +84,14 @@ public class VehicleController {
         }
 
         vehicleService.addVehicle(vehicle);
+
+        //obtener usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        //guardar el log
+        logService.saveLog(username, "REGISTER_VEHICLE", "/vehicle/register");
+
         return "redirect:/vehicle/list";
     }
 

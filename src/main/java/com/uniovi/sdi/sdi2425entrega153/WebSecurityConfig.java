@@ -17,6 +17,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
+    private final CustomLogoutHandler customLogoutHandler;
+
+    public WebSecurityConfig(CustomLogoutHandler customLogoutHandler) {
+        this.customLogoutHandler = customLogoutHandler;
+    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -44,6 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .and()
                 .logout()
+                    .logoutUrl("/logout")
+                    .addLogoutHandler(customLogoutHandler)
+                    .logoutSuccessUrl("/login?logout")
                     .permitAll();
     }
 

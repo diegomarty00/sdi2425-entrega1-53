@@ -53,6 +53,10 @@
                 </a>
             </li>
 
+            <li class="nav-item dropdown"  sec:authorize="hasRole('ROLE_ADMIN')" >
+                <a class="nav-link" id="listLogs" href="/user/logs" th:text="#{log.message}"></a>
+            </li>
+
         </ul>
 
         <ul class="navbar-nav justify-content-end">
