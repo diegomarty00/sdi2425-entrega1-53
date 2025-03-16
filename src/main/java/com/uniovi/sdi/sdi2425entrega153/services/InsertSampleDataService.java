@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.services;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.Path;
+import com.uniovi.sdi.sdi2425entrega153.entities.Refuel;
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
 import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,14 @@ public class InsertSampleDataService {
 
     private final VehicleService vehicleService;
     private final PathService pathService;
+    private final RefuelService refuelService;
 
-    public InsertSampleDataService(UsersService usersService, RolesService rolesService, VehicleService vehicleService, PathService pathService) {
+    public InsertSampleDataService(UsersService usersService, RolesService rolesService, VehicleService vehicleService, PathService pathService, RefuelService refuelService) {
         this.usersService = usersService;
         this.rolesService = rolesService;
         this.vehicleService = vehicleService;
         this.pathService = pathService;
+        this.refuelService = refuelService;
     }
 
     @PostConstruct
@@ -45,6 +48,7 @@ public class InsertSampleDataService {
         Vehicle v0 = new Vehicle("1111", "CHASIS", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
         vehicleService.addVehicle(v0);
         Vehicle v1 = new Vehicle("1234BCD", "CHASIS12345678901234", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
+        v1.setFree(false);
         vehicleService.addVehicle(v1);
         Vehicle v2 = new Vehicle("O1234AB", "CHASIS23456789012345", "Toyota", "Corolla", Vehicle.FUEL_TYPES.GASOLINA, 12345);
         vehicleService.addVehicle(v2);
@@ -95,6 +99,9 @@ public class InsertSampleDataService {
         Path path5 = new Path(new Date(), 3.0, 78901, 79000, "A1234BCD", 50.0, user2);
         path5.setUserDni(user3.getDni());
         pathService.addPath(path5);
+
+        Refuel r1 = new Refuel("RedSol", 1.40, 30, 2142, new Date(), "", v0);
+        refuelService.addRefuel(r1);
 
     }
 }

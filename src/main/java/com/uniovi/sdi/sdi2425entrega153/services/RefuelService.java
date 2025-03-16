@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class RefuelService {
@@ -69,4 +70,8 @@ public class RefuelService {
         return refuels;
     }
 
+    public List<Refuel> getRefulsByVehicle(String plate) {
+        List<Refuel> result = refuelRepository.getRefulsByVehicle(plate);
+        return result;
+    }
 }

@@ -81,4 +81,8 @@ public class VehicleService {
         return vehicle;
     }
 
+    public List<Vehicle> findAll() {
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        return vehicles;
+    }
 }
