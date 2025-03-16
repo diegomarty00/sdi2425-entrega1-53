@@ -6,9 +6,9 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2 th:text="${refuels}"> - <span th:text="${vehicle.plate}"></span></h2>
+    <h2 th:text="#{refuels}"> - <span th:text="${vehicle.plate}"></span></h2>
 
-    <p th:text="${refuels.info}">:</p>
+    <p th:text="#{refuels.info}">:</p>
 
     <div class="table-responsive">
 

@@ -5,10 +5,10 @@
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
 <div class="container">
-    <h2>Iniciar Trayecto</h2>
+    <h2 th:text="#{Nav.paths.start}"></h2>
     <form th:action="@{/path/start}" th:object="${path}" method="post">
         <div>
-            <label for="vehicleRegistration">Vehículo Disponible:</label>
+            <label for="vehicleRegistration" th:text="#{vehicle.available}">Vehículo Disponible:</label>
             <select id="vehicleRegistration" name="vehicleRegistration">
                 <option th:each="vehicle : ${availableVehicles}"
                         th:value="${vehicle.plate}"
@@ -25,7 +25,7 @@
         <div>
             <!-- Aquí se pueden mostrar otros datos, si se requieren -->
         </div>
-        <button type="submit">Iniciar Trayecto</button>
+        <button type="submit" th:text="#{Nav.paths.start}"></button>
     </form>
 </div>
 <footer th:replace="fragments/footer"/>

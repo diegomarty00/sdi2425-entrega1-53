@@ -77,10 +77,10 @@
     function validateDeleteForm() {
         let checkboxes = document.querySelectorAll("input[name='selectedVehicles']:checked");
         if (checkboxes.length === 0) {
-            alert(validationMessage); // Usa el mensaje internacionalizado
+            alert([[#{delete.validation.message}]]); // Usa el mensaje internacionalizado
             return false; // Evita el envío del formulario
         }
-        return confirm(confirmationMessage); // Usa el mensaje internacionalizado
+        return confirm([[#{delete.confirmation.message}]]); // Usa el mensaje internacionalizado
     }
 
     // Funcionalidad de "Seleccionar todos"
