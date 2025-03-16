@@ -40,7 +40,7 @@ public class InsertSampleDataService {
 
         Vehicle v0 = new Vehicle("1111", "CHASIS", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
         vehicleService.addVehicle(v0);
-        Vehicle v1 = new Vehicle("1234BCD", "CHASIS12345678901234", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
+        Vehicle v1 = new Vehicle("1234BCD", "12345678901234111", "Alfa", "Romeo", Vehicle.FUEL_TYPES.DIESEL, 4578);
         vehicleService.addVehicle(v1);
         Vehicle v2 = new Vehicle("O1234AB", "CHASIS23456789012345", "Toyota", "Corolla", Vehicle.FUEL_TYPES.GASOLINA, 12345);
         vehicleService.addVehicle(v2);

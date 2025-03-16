@@ -1,6 +1,7 @@
 package com.uniovi.sdi.sdi2425entrega153.pageobjects;
 
 import com.uniovi.sdi.sdi2425entrega153.entities.User;
+import com.uniovi.sdi.sdi2425entrega153.entities.Vehicle;
 import com.uniovi.sdi.sdi2425entrega153.util.SeleniumUtils;
 import org.openqa.selenium.support.ui.Select;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,19 @@ public class PO_PrivateView extends PO_NavView {
         Assertions.assertEquals(checkText, elements.get(0).getText());
     }
 
+    static public void registerVehicle(WebDriver driver) {
+        goToVehicleLink(driver, "register");
+        String checkText = "1234ABC";
+        fillFormRegisterVehicle(driver, checkText, "11111111111111111", "Toyota","qwe");
+
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free",
+                "//a[contains(@class, 'page-link')]");
+
+        elements.getLast().click();
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.get(0).getText());
+    }
+
     static public void registerUserError(WebDriver driver, String dnip, String namep, String lastNamep,
                                          String expectedError) {
         goToUserLink(driver, "register");
@@ -36,10 +50,25 @@ public class PO_PrivateView extends PO_NavView {
         Assertions.assertTrue(elements.getFirst().getText().contains(expectedError));
     }
 
+    static public void registerVehicleError(WebDriver driver, String plateP, String chassisP, String brandP, String modelP, String expectedError) {
+        goToVehicleLink(driver, "register");
+        fillFormRegisterVehicle(driver, plateP, chassisP, brandP, modelP);
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", expectedError);
+        Assertions.assertTrue(elements.getFirst().getText().contains(expectedError));
+    }
+
+
     static public void listUsers(WebDriver driver, List<User> users) {
         goToUserLink(driver, "list");
         for(User user : users) {
             if(!findUser(driver, user)) Assertions.fail("User not found");
+        }
+    }
+
+    static public void listVehicles(WebDriver driver, List<Vehicle> vehicles) {
+        goToVehicleLink(driver, "list");
+        for(Vehicle vehicle : vehicles) {
+            if (!findVehicle(driver, vehicle)) Assertions.fail("Vehicle not found");
         }
     }
 
@@ -111,6 +140,20 @@ public class PO_PrivateView extends PO_NavView {
         }
     }
 
+    static private boolean findVehicle(WebDriver driver, Vehicle vehicle) {
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", vehicle.getPlate());
+
+        if(elements.getFirst().getText().equals(vehicle.getPlate())) {
+            Assertions.assertEquals(vehicle.getPlate(), elements.getFirst().getText());
+            return true;
+        } else {
+            elements = PO_View.checkElementBy(driver, "free",
+                    "//div[@class='text-center']/ul[@class='pagination justify-content-center']/li[4]/a");
+            elements.getFirst().click();
+            return findVehicle(driver, vehicle);
+        }
+    }
+
     static private void fillFormChangaPassword(WebDriver driver, String oldPasswordp, String newPasswordp,
                                                String passwordConfirmp) {
         SeleniumUtils.waitSeconds(driver, 5);
@@ -166,11 +209,71 @@ public class PO_PrivateView extends PO_NavView {
         driver.findElement(button).click();
     }
 
+    static private void fillFormRegisterVehicle(WebDriver driver, String plateP, String chassisP, String brandP, String modelP) {
+        SeleniumUtils.waitSeconds(driver, 5);
+        WebElement plate = driver.findElement(By.name("plate"));
+        plate.clear();
+        plate.sendKeys(plateP);
+        WebElement chassis = driver.findElement(By.name("chassisNumber"));
+        chassis.clear();
+        chassis.sendKeys(chassisP);
+        WebElement brand = driver.findElement(By.name("brandName"));
+        brand.clear();
+        brand.sendKeys(brandP);
+        WebElement model = driver.findElement(By.name("model"));
+        model.clear();
+        model.sendKeys(modelP);
+
+        WebElement fuelDropdown = driver.findElement(By.name("fuelType"));
+        Select selectFuel = new Select(fuelDropdown);
+
+        // Seleccionar la primera opción después de la opción vacía
+        if (selectFuel.getOptions().size() > 1) {
+            selectFuel.selectByIndex(1); // La opción en índice 0 es "Seleccione un tipo"
+        }
+
+        By button = By.className("btn");
+        driver.findElement(button).click();
+
+    }
+
+    public static void goToVehicleLink(WebDriver driver, String link) {
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free",
+                "//*[@id='my-navbarColor02']/ul[1]/li[3]");
+        elements.getFirst().click();
+        elements = PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'vehicle/" + link + "')]");
+        elements.getFirst().click();
+    }
+
     static private void goToUserLink(WebDriver driver, String link) {
         List<WebElement> elements = PO_View.checkElementBy(driver, "free",
                 "//*[@id='my-navbarColor02']/ul[1]/li[2]");
         elements.getFirst().click();
         elements = PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'user/" + link + "')]");
         elements.getFirst().click();
+    }
+
+    public static WebElement selectVehicleCheckbox(WebDriver driver, int index) {
+        return driver.findElements(By.name("selectedVehicles")).get(index);
+    }
+
+    public static void deleteVehicle(WebDriver driver) {
+        // Click en el botón de eliminar vehículos
+        WebElement deleteButton = driver.findElement(By.xpath("//form[@id='deleteForm']/button"));
+        deleteButton.click();
+    }
+
+    public static void verifyVehicleDisappeared(WebDriver driver, String vehiclePlate) {
+        List<WebElement> vehicles = driver.findElements(By.xpath("//table[@id='vehiclesTable']//tbody//tr"));
+        boolean found = false;
+
+        for (WebElement vehicle : vehicles) {
+            WebElement plateElement = vehicle.findElement(By.xpath("td[2]"));
+            if (plateElement.getText().equals(vehiclePlate)) {
+                found = true;
+                break;
+            }
+        }
+        Assertions.assertFalse(found, "El vehículo con matrícula " + vehiclePlate + " sigue en la lista.");
     }
 }
