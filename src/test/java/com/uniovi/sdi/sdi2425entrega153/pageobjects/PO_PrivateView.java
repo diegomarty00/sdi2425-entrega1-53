@@ -42,6 +42,21 @@ public class PO_PrivateView extends PO_NavView {
         Assertions.assertEquals(checkText, elements.get(0).getText());
     }
 
+    static public void registerUser(WebDriver driver, String dnip) {
+        goToUserLink(driver, "register");
+        //Ahora vamos a rellenar los datos del usuario
+        String checkText = "Lamine";
+        fillFormRegisterUser(driver, dnip, checkText, "Yamal");
+        //Esperamos a que se muestren los enlaces de paginación de la lista de usuarios
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free",
+                "//a[contains(@class, 'page-link')]");
+        //Nos vamos a la última página
+        elements.getLast().click();
+        //Comprobamos que aparece el usuario en la página
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.get(0).getText());
+    }
+
     static public void registerUserError(WebDriver driver, String dnip, String namep, String lastNamep,
                                          String expectedError) {
         goToUserLink(driver, "register");

@@ -6,10 +6,14 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
 
-    <h2 th:text="#{users}"></h2>
-    <p th:text="#{users.info}">:</p>
+    <h2 th:text="#{logs}"></h2>
+    <p th:text="#{logs.info}">:</p>
     <div class="table-responsive">
-
+        <form th:action="@{/user/logs/delete}" method="post" style="margin-bottom: 20px;">
+            <button type="submit" class="btn btn-danger">
+                <span th:text="#{log.deleteAll}">Borrar todos los logs</span>
+            </button>
+        </form>
         <table class="table table-hover" th:fragment="logsTable" id="logsTable">
             <thead>
             <tr>

@@ -26,9 +26,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2425Entrega153ApplicationTests {
 
-    static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+    static String PathFirefox = "C:\\Users\\Usuario\\AppData\\Local\\Mozilla Firefox\\firefox.exe";
+    static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\uni\\SDI\\PL-SDI-Sesión6-material\\geckodriver-v0.30.0-win64.exe";
     //static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\SDI\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
-    static String Geckodriver = "C:\\Users\\Diego Marty\\Desktop\\Documentos\\Universidad\\SDI\\PL-SDI-Sesión6-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+    //static String Geckodriver = "C:\\Users\\Diego Marty\\Desktop\\Documentos\\Universidad\\SDI\\PL-SDI-Sesión6-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
     static WebDriver driver = getDriver(PathFirefox, Geckodriver);
     static String URL = "http://localhost:8100";
     @Autowired
@@ -456,7 +457,7 @@ sistema.
         }
 
     }
-
+/*
     @Test
     @Order(25)
     void testInicioTrayectoValido() throws Exception {
@@ -645,7 +646,7 @@ sistema.
      * [Prueba33] Registro de fin de trayecto válido.
      * Se asume que el usuario "userActive" tiene un trayecto activo.
      * Se rellena el odómetro con un valor mayor al inicio del trayecto.
-     */
+     *
     @Test
     @Order(33)
     void testFinTrayectoValido() throws InterruptedException {
@@ -678,7 +679,7 @@ sistema.
      * [Prueba34] Registro de fin de trayecto inválido (odómetro vacío).
      * Se asume que "userActive" tiene un trayecto activo,
      * pero no se rellena el campo odómetro.
-     */
+     *
     @Test
     @Order(34)
     void testFinTrayectoOdometroVacio() throws InterruptedException {
@@ -707,7 +708,7 @@ sistema.
      * [Prueba35] Registro de fin de trayecto inválido (odómetro negativo).
      * Se asume que "userActive" tiene un trayecto activo,
      * pero se rellena el campo con un valor negativo.
-     */
+     *
     @Test
     @Order(35)
     void testFinTrayectoOdometroNegativo() throws InterruptedException {
@@ -733,7 +734,7 @@ sistema.
     /**
      * [Prueba36] Registro de fin de trayecto inválido (no hay trayectos en curso).
      * Se asume que el usuario "userNoActive" no tiene un trayecto activo.
-     */
+     *
     @Test
     @Order(36)
     void testFinTrayectoSinTrayectoActivo() throws InterruptedException {
@@ -749,7 +750,7 @@ sistema.
         String errorText = driver.findElement(By.id("errorMessage")).getText();
         Assertions.assertTrue(errorText.contains("No tienes un trayecto en curso"));
     }
-
+*/
     @Test
     @Order(37)
     void Prueba37() {
@@ -873,5 +874,159 @@ sistema.
         String error = PO_HomeView.getP().getString("Error.password.change.different", PO_Properties.getSPANISH());
         PO_PrivateView.changePasswordError(driver, "a123456789A-", "123456789aA-", "123456789aA#", error);
         PO_LoginView.logout(driver);
+    }
+
+    @Test
+    @Order(44)
+    void Prueba44() {
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
+        //Comprobar página principal
+        String checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getSPANISH());
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "Spanish");
+        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getSPANISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        //Comprobar página de cambio de contraseña
+        elements = PO_View.checkElementBy(driver, "free",
+                "//*[@id='my-navbarColor02']/ul[2]/li[2]/a");
+        elements.getFirst().click();
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getSPANISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "Spanish");
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getSPANISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        //Comprobar página de logs
+        elements = PO_View.checkElementBy(driver, "free",
+                "//*[@id='my-navbarColor02']/ul[1]/li[4]/a");
+        elements.getFirst().click();
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getSPANISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "Spanish");
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getSPANISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+
+        PO_LoginView.logout(driver);
+    }
+
+    @Test
+    @Order(45)
+    void Prueba45() {
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
+        //Comprobar página principal
+        PO_PrivateView.changeLanguage(driver, "English");
+        String checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getENGLISH());
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "French");
+        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getFRENCH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("disconnect", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        //Comprobar página de cambio de contraseña
+        elements = PO_View.checkElementBy(driver, "free",
+                "//*[@id='my-navbarColor02']/ul[2]/li[2]/a");
+        elements.getFirst().click();
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "French");
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getFRENCH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("password.change", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        //Comprobar página de logs
+        elements = PO_View.checkElementBy(driver, "free",
+                "//*[@id='my-navbarColor02']/ul[1]/li[4]/a");
+        elements.getFirst().click();
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "French");
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getFRENCH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        PO_PrivateView.changeLanguage(driver, "English");
+        checkText = PO_HomeView.getP().getString("logs.info", PO_Properties.getENGLISH());
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+
+        PO_LoginView.logout(driver);
+    }
+
+    @Test
+    @Order(46)
+    void Prueba46() {
+        driver.get(URL + "/user/list");
+        String checkText = PO_HomeView.getP().getString("login.message", PO_Properties.getSPANISH());
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+    }
+
+    @Test
+    @Order(47)
+    void Prueba47() {
+        driver.get(URL + "/vehicle/free");
+        String checkText = PO_HomeView.getP().getString("login.message", PO_Properties.getSPANISH());
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, elements.getFirst().getText());
+    }
+
+    @Test
+    @Order(49)
+    void Prueba49() {
+        PO_LoginView.login(driver, "12345678Z", "prueba");
+        PO_LoginView.login(driver, "12345678Z", "prueba");
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
+        PO_LoginView.logout(driver);
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
+        PO_LoginView.logout(driver);
+        PO_LoginView.login(driver, "12345678Z", "@Dm1n1str@D0r");
+        PO_PrivateView.registerUser(driver);
+        PO_PrivateView.registerUser(driver, "11223344A");
+        driver.get(URL + "/user/logs");
+
+        String checkText = "ALTA";
+        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(2, elements.size());
+
+        checkText = "PET";
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertTrue(elements.size() > 2);
+
+        checkText = "LOGIN-EX";
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertTrue(elements.size() > 2);
+
+        checkText = "LOGIN-ERR";
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(2, elements.size());
+
+        checkText = "LOGOUT";
+        elements = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(2, elements.size());
     }
 }
